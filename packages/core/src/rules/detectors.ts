@@ -56,16 +56,32 @@ function findPhrase(
   to: number,
 ): { startToken: number; endToken: number } | undefined {
   const indices = significantTokens(context, from, to)
-  for (let i = 0; i + words.length <= indices.length; i++) {
+
+  // Match by accumulated text, not one token per word: the tokenizer keeps "doesn't" as a single
+  // word, so a phrase like "doesn't just" spans two words but may span any number of tokens.
+  for (let i = 0; i < indices.length; i++) {
+    let consumed = 0
     let ok = true
+
     for (let w = 0; w < words.length; w++) {
-      if (context.tokens[indices[i + w]!]!.norm !== words[w]) {
+      const wanted = words[w]!
+      let text = ''
+      let used = 0
+      while (text.length < wanted.length) {
+        const index = indices[i + consumed + used]
+        if (index === undefined) break
+        text += context.tokens[index]!.norm
+        used++
+      }
+      if (text !== wanted) {
         ok = false
         break
       }
+      consumed += used
     }
-    if (ok) {
-      return { startToken: indices[i]!, endToken: indices[i + words.length - 1]! + 1 }
+
+    if (ok && consumed > 0) {
+      return { startToken: indices[i]!, endToken: indices[i + consumed - 1]! + 1 }
     }
   }
   return undefined

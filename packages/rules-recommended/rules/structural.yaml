@@ -17,6 +17,12 @@
         - "not just"
         - "isn't just"
         - "is not just"
+        - "doesn't just"
+        - "does not just"
+        - "don't just"
+        - "do not just"
+        - "won't just"
+        - "aren't just"
         - "not only"
         - "more than just"
         - "isn't about"
@@ -34,9 +40,11 @@
     flag:
       - It's not just a tool, it's a workflow.
       - This isn't just about speed, it's about confidence.
+      - Our platform doesn't just manage tasks, it's a workflow.
     pass:
       - This is not just for admins; editors can use it too.
       - It is more than we expected.
+      - It doesn't just work on Linux; we test on Windows as well.
 
 - id: tricolon
   lang: en

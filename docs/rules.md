@@ -557,10 +557,12 @@ Passes:
 Flags:
 - It's not just a tool, it's a workflow.
 - This isn't just about speed, it's about confidence.
+- Our platform doesn't just manage tasks, it's a workflow.
 
 Passes:
 - This is not just for admins; editors can use it too.
 - It is more than we expected.
+- It doesn't just work on Linux; we test on Windows as well.
 
 ### `parallel-pair`
 
