@@ -1,0 +1,33 @@
+{
+  "name": "@voxfold/rules-recommended",
+  "version": "0.0.0",
+  "description": "The recommended Voxfold rule set: the AI-copy tells, as data.",
+  "license": "MIT",
+  "type": "module",
+  "sideEffects": false,
+  "engines": {
+    "node": "^22.12.0 || >=24.0.0"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./rules.json": "./dist/rules.json",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist",
+    "rules"
+  ],
+  "scripts": {
+    "build": "node scripts/compile.js && tsdown",
+    "typecheck": "tsc -p tsconfig.json"
+  },
+  "dependencies": {
+    "@voxfold/core": "workspace:*"
+  },
+  "devDependencies": {
+    "yaml": "2.9.1"
+  }
+}

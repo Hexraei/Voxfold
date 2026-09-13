@@ -1,0 +1,143 @@
+# Adverbs and adjectives that add emphasis but no information.
+#
+# Deleting a word is only a `fix` when the sentence survives it. The engine runs the cleanup and
+# checks the result; if the check fails the fix is downgraded to a suggestion automatically.
+
+- id: seamlessly
+  lang: en
+  kind: mechanical
+  category: intensifier
+  weight: 4
+  severity: warn
+  message: "\"seamlessly\""
+  docs: Everything claims to be seamless. Delete it, or say what the integration actually does.
+  match:
+    type: words
+    words: [seamlessly, seamless]
+  fix:
+    type: delete
+    cleanup: [collapse-space]
+  examples:
+    flag:
+      - It integrates seamlessly with your stack.
+      - A seamless experience across devices.
+    pass:
+      - It integrates with GitHub and GitLab.
+
+- id: effortlessly
+  lang: en
+  kind: mechanical
+  category: intensifier
+  weight: 4
+  severity: warn
+  message: "\"effortlessly\""
+  docs: Delete it, or show the effort it saves.
+  match:
+    type: words
+    words: [effortlessly, effortless]
+  fix:
+    type: delete
+    cleanup: [collapse-space]
+  examples:
+    flag:
+      - Deploy effortlessly from any branch.
+    pass:
+      - Deploy from any branch in one command.
+
+- id: truly
+  lang: en
+  kind: mechanical
+  category: intensifier
+  weight: 2
+  severity: warn
+  message: "\"truly\""
+  docs: The sentence is as true without it.
+  match:
+    type: words
+    words: [truly]
+  fix:
+    type: delete
+    cleanup: [collapse-space]
+  examples:
+    flag:
+      - This is truly the fastest option.
+    pass:
+      - This is the fastest option we measured.
+
+- id: incredibly
+  lang: en
+  kind: mechanical
+  category: intensifier
+  weight: 2
+  severity: warn
+  message: "\"incredibly\""
+  docs: Replace the intensifier with a number.
+  match:
+    type: words
+    words: [incredibly]
+  fix:
+    type: delete
+    cleanup: [collapse-space]
+  examples:
+    flag:
+      - It is incredibly fast under load.
+    pass:
+      - It answers in 40ms under load.
+
+- id: genuinely
+  lang: en
+  kind: mechanical
+  category: intensifier
+  weight: 2
+  severity: warn
+  message: "\"genuinely\""
+  docs: Claiming sincerity rarely conveys it.
+  match:
+    type: words
+    words: [genuinely]
+  fix:
+    type: delete
+    cleanup: [collapse-space]
+  examples:
+    flag:
+      - We genuinely care about your data.
+    pass:
+      - We delete your data within 30 days.
+
+- id: robust
+  lang: en
+  kind: structural
+  category: intensifier
+  weight: 3
+  severity: warn
+  message: "\"robust\""
+  docs: "Say what makes it robust: retries, tests, uptime."
+  match:
+    type: words
+    tag: ADJ
+    words: [robust]
+  # Known limitation: statistics genuinely uses "robust standard errors", and that flags too.
+  # Turn the rule off in config for a stats-heavy repo.
+  examples:
+    flag:
+      - A robust platform for growing teams.
+    pass:
+      - It retries failed jobs three times.
+      - Robustness testing runs every night.
+
+- id: simply
+  lang: en
+  kind: structural
+  category: intensifier
+  weight: 1
+  severity: warn
+  message: "\"simply\""
+  docs: If it is simple, the steps will show it. Telling the reader it is easy can read as dismissive.
+  match:
+    type: words
+    words: [simply]
+  examples:
+    flag:
+      - Simply connect your repository and go.
+    pass:
+      - Connect your repository, then pick a branch.

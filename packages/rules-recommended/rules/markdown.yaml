@@ -1,0 +1,51 @@
+# Markdown-specific tells, aimed at generated READMEs. Restricted to markdown formats so they
+# never fire on a React page or an HTML scan.
+
+- id: emoji-heading
+  lang: en
+  kind: structural
+  category: markdown
+  weight: 3
+  severity: warn
+  message: Decorative emoji opening a heading
+  docs: "\"🚀 Features\" is the generated-README look. The heading text alone is enough."
+  match:
+    type: detector
+    detector: emoji-heading
+  formats: [markdown, mdx]
+  appliesTo: [heading]
+  density:
+    per: document
+    threshold: 3
+    below: 0.3
+  examples:
+    flag:
+      - 🚀 Features
+      - ✨ Getting Started
+    pass:
+      - Features
+
+- id: bold-lead-in-list
+  lang: en
+  kind: structural
+  category: markdown
+  weight: 2
+  severity: warn
+  message: Bold lead-in on a list item
+  docs: 'A page of "**Fast:** …" bullets reads as generated. One or two are fine.'
+  match:
+    type: detector
+    detector: bold-lead-in-list
+    params:
+      maxLeadWords: 4
+  formats: [markdown, mdx]
+  appliesTo: [listItem]
+  density:
+    per: document
+    threshold: 4
+    below: 0.2
+  examples:
+    flag:
+      - "Fast: ships in milliseconds"
+    pass:
+      - Run the CLI once to create a config file.

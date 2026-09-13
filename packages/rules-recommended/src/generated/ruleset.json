@@ -1,0 +1,1699 @@
+{
+  "name": "recommended",
+  "version": "1.0.0",
+  "rules": [
+    {
+      "id": "adverb-inanimate-subject",
+      "lang": "en",
+      "kind": "structural",
+      "category": "inanimate-adverb",
+      "weight": 5,
+      "severity": "warn",
+      "message": "Manner adverb on a thing that cannot act",
+      "docs": "\"The dashboard quietly syncs\" gives feelings to software. Say what it does.",
+      "match": {
+        "type": "detector",
+        "detector": "adverb-inanimate-subject",
+        "params": {
+          "adverbs": [
+            "quietly",
+            "gently",
+            "silently",
+            "gracefully",
+            "elegantly",
+            "thoughtfully",
+            "beautifully",
+            "intelligently",
+            "patiently",
+            "happily",
+            "lovingly"
+          ]
+        }
+      },
+      "examples": {
+        "flag": [
+          "The dashboard quietly syncs your data.",
+          "The parser gracefully handles errors."
+        ],
+        "pass": [
+          "She quietly left the room.",
+          "Our team gently reminds customers before renewal."
+        ]
+      }
+    },
+    {
+      "id": "ai-lexicon",
+      "lang": "en",
+      "kind": "structural",
+      "category": "buzzword",
+      "weight": 4,
+      "severity": "warn",
+      "message": "Overused abstract noun (tapestry, testament, realm, landscape)",
+      "docs": "These abstractions appear constantly in generated prose. Name the concrete thing.",
+      "match": {
+        "type": "words",
+        "words": [
+          "tapestry",
+          "testament",
+          "realm",
+          "landscape",
+          "ecosystem",
+          "paradigm",
+          "synergy",
+          "synergies"
+        ]
+      },
+      "examples": {
+        "flag": [
+          "A rich tapestry of integrations.",
+          "In the ever-changing landscape of DevOps."
+        ],
+        "pass": [
+          "It connects to 40 services."
+        ]
+      }
+    },
+    {
+      "id": "at-the-end-of-the-day",
+      "lang": "en",
+      "kind": "structural",
+      "category": "opener-closer",
+      "weight": 3,
+      "severity": "warn",
+      "message": "\"at the end of the day\"",
+      "docs": "A filler transition. Delete it or state the conclusion.",
+      "match": {
+        "type": "phrases",
+        "phrases": [
+          "at the end of the day"
+        ]
+      },
+      "examples": {
+        "flag": [
+          "At the end of the day, shipping is what counts."
+        ],
+        "pass": [
+          "Shipping is what counts."
+        ]
+      }
+    },
+    {
+      "id": "bespoke-curated",
+      "lang": "en",
+      "kind": "structural",
+      "category": "buzzword",
+      "weight": 2,
+      "severity": "warn",
+      "message": "Bespoke / curated",
+      "docs": "Use \"custom\", or say who chose it and why.",
+      "match": {
+        "type": "words",
+        "words": [
+          "bespoke",
+          "curated",
+          "curation"
+        ]
+      },
+      "examples": {
+        "flag": [
+          "A curated selection of bespoke templates."
+        ],
+        "pass": [
+          "Twelve templates, chosen by our design team."
+        ]
+      }
+    },
+    {
+      "id": "bold-lead-in-list",
+      "lang": "en",
+      "kind": "structural",
+      "category": "markdown",
+      "weight": 2,
+      "severity": "warn",
+      "message": "Bold lead-in on a list item",
+      "docs": "A page of \"**Fast:** …\" bullets reads as generated. One or two are fine.",
+      "match": {
+        "type": "detector",
+        "detector": "bold-lead-in-list",
+        "params": {
+          "maxLeadWords": 4
+        }
+      },
+      "formats": [
+        "markdown",
+        "mdx"
+      ],
+      "appliesTo": [
+        "listItem"
+      ],
+      "density": {
+        "per": "document",
+        "threshold": 4,
+        "below": 0.2
+      },
+      "examples": {
+        "flag": [
+          "Fast: ships in milliseconds"
+        ],
+        "pass": [
+          "Run the CLI once to create a config file."
+        ]
+      }
+    },
+    {
+      "id": "colon-reveal",
+      "lang": "en",
+      "kind": "structural",
+      "category": "punctuation",
+      "weight": 3,
+      "severity": "warn",
+      "message": "Dramatic colon reveal",
+      "docs": "\"The result:\" builds suspense for a fact. State the fact.",
+      "match": {
+        "type": "phrases",
+        "phrases": [
+          "the result:",
+          "the best part:",
+          "the catch:",
+          "the kicker:",
+          "here's the thing:",
+          "the bottom line:"
+        ]
+      },
+      "examples": {
+        "flag": [
+          "The result: teams ship twice as often."
+        ],
+        "pass": [
+          "Result codes: 0 means success."
+        ]
+      }
+    },
+    {
+      "id": "commence",
+      "lang": "en",
+      "kind": "mechanical",
+      "category": "plain-words",
+      "weight": 2,
+      "severity": "warn",
+      "message": "\"commence\" instead of \"start\"",
+      "docs": "Use \"start\" or \"begin\".",
+      "match": {
+        "type": "words",
+        "words": [
+          "commence",
+          "commences",
+          "commenced",
+          "commencing"
+        ]
+      },
+      "fix": {
+        "type": "replace",
+        "map": {
+          "commence": "start",
+          "commences": "starts",
+          "commenced": "started",
+          "commencing": "starting"
+        }
+      },
+      "examples": {
+        "flag": [
+          "The migration will commence tonight."
+        ],
+        "pass": [
+          "The migration starts tonight."
+        ]
+      }
+    },
+    {
+      "id": "cutting-edge",
+      "lang": "en",
+      "kind": "structural",
+      "category": "buzzword",
+      "weight": 3,
+      "severity": "warn",
+      "message": "Cutting-edge / state-of-the-art",
+      "docs": "Name the technology and the year instead.",
+      "match": {
+        "type": "phrases",
+        "phrases": [
+          "cutting edge",
+          "cutting-edge",
+          "state of the art",
+          "state-of-the-art",
+          "bleeding edge"
+        ]
+      },
+      "examples": {
+        "flag": [
+          "Built on cutting-edge infrastructure."
+        ],
+        "pass": [
+          "Built on Postgres 17 and Redis."
+        ]
+      }
+    },
+    {
+      "id": "delve",
+      "lang": "en",
+      "kind": "structural",
+      "category": "buzzword",
+      "weight": 4,
+      "severity": "warn",
+      "message": "\"delve\"",
+      "docs": "Use \"look at\" or \"cover\".",
+      "match": {
+        "type": "words",
+        "words": [
+          "delve",
+          "delves",
+          "delved",
+          "delving"
+        ]
+      },
+      "examples": {
+        "flag": [
+          "Let's delve into the details."
+        ],
+        "pass": [
+          "Here are the details."
+        ]
+      }
+    },
+    {
+      "id": "dive-in",
+      "lang": "en",
+      "kind": "mechanical",
+      "category": "opener-closer",
+      "weight": 4,
+      "severity": "warn",
+      "message": "\"let's dive in\" / \"without further ado\"",
+      "docs": "Filler before the actual content. Delete it.",
+      "match": {
+        "type": "phrases",
+        "phrases": [
+          "let's dive in",
+          "lets dive in",
+          "let's dive into",
+          "without further ado",
+          "let's get started",
+          "let's take a look"
+        ]
+      },
+      "fix": {
+        "type": "delete",
+        "cleanup": [
+          "collapse-space",
+          "dangling-comma",
+          "recapitalize"
+        ]
+      },
+      "examples": {
+        "flag": [
+          "Without further ado, here is the config."
+        ],
+        "pass": [
+          "Here is the config."
+        ]
+      }
+    },
+    {
+      "id": "double-hyphen-dash",
+      "lang": "en",
+      "kind": "mechanical",
+      "category": "punctuation",
+      "weight": 2,
+      "severity": "warn",
+      "message": "Double hyphen used as a dash",
+      "docs": "Write a real em dash, or restructure the sentence.",
+      "match": {
+        "type": "regex",
+        "pattern": "\\s--\\s"
+      },
+      "suggest": [
+        {
+          "label": "comma",
+          "replace": ", "
+        },
+        {
+          "label": "full stop",
+          "replace": ". ",
+          "recapitalize": true
+        }
+      ],
+      "examples": {
+        "flag": [
+          "It ships fast -- really fast."
+        ],
+        "pass": [
+          "Run the command with --verbose to see more."
+        ]
+      }
+    },
+    {
+      "id": "effortlessly",
+      "lang": "en",
+      "kind": "mechanical",
+      "category": "intensifier",
+      "weight": 4,
+      "severity": "warn",
+      "message": "\"effortlessly\"",
+      "docs": "Delete it, or show the effort it saves.",
+      "match": {
+        "type": "words",
+        "words": [
+          "effortlessly",
+          "effortless"
+        ]
+      },
+      "fix": {
+        "type": "delete",
+        "cleanup": [
+          "collapse-space"
+        ]
+      },
+      "examples": {
+        "flag": [
+          "Deploy effortlessly from any branch."
+        ],
+        "pass": [
+          "Deploy from any branch in one command."
+        ]
+      }
+    },
+    {
+      "id": "elevate",
+      "lang": "en",
+      "kind": "structural",
+      "category": "buzzword",
+      "weight": 2,
+      "severity": "warn",
+      "message": "\"elevate\"",
+      "docs": "Use \"improve\", or name the change.",
+      "match": {
+        "type": "words",
+        "tag": "VERB",
+        "words": [
+          "elevate",
+          "elevates",
+          "elevating"
+        ]
+      },
+      "examples": {
+        "flag": [
+          "Elevate your content strategy."
+        ],
+        "pass": [
+          "Elevation data comes from the sensor."
+        ]
+      }
+    },
+    {
+      "id": "em-dash",
+      "lang": "en",
+      "kind": "mechanical",
+      "category": "punctuation",
+      "weight": 3,
+      "severity": "warn",
+      "message": "Em dash",
+      "docs": "Em dashes cluster in generated copy. A comma, colon or full stop is usually clearer.",
+      "match": {
+        "type": "chars",
+        "chars": [
+          "—"
+        ]
+      },
+      "density": {
+        "per": "block",
+        "threshold": 3,
+        "below": 0.2
+      },
+      "densityOverrides": {
+        "heading": {
+          "threshold": 5
+        }
+      },
+      "suggest": [
+        {
+          "label": "comma",
+          "replace": ", "
+        },
+        {
+          "label": "full stop",
+          "replace": ". ",
+          "recapitalize": true
+        },
+        {
+          "label": "colon",
+          "replace": ": "
+        }
+      ],
+      "examples": {
+        "flag": [
+          "It ships fast—really fast—and it scales—quietly."
+        ],
+        "pass": [
+          "It ships fast and scales well.",
+          "A hyphen-joined word is fine."
+        ]
+      }
+    },
+    {
+      "id": "embark-journey",
+      "lang": "en",
+      "kind": "structural",
+      "category": "buzzword",
+      "weight": 3,
+      "severity": "warn",
+      "message": "Embark / journey",
+      "docs": "Using software is not a journey. Say what the first step is.",
+      "match": {
+        "type": "phrases",
+        "phrases": [
+          "embark on",
+          "your journey",
+          "the journey",
+          "journey to",
+          "journey towards"
+        ]
+      },
+      "examples": {
+        "flag": [
+          "Embark on your automation journey today."
+        ],
+        "pass": [
+          "Install the CLI to get started."
+        ]
+      }
+    },
+    {
+      "id": "emoji-heading",
+      "lang": "en",
+      "kind": "structural",
+      "category": "markdown",
+      "weight": 3,
+      "severity": "warn",
+      "message": "Decorative emoji opening a heading",
+      "docs": "\"🚀 Features\" is the generated-README look. The heading text alone is enough.",
+      "match": {
+        "type": "detector",
+        "detector": "emoji-heading"
+      },
+      "formats": [
+        "markdown",
+        "mdx"
+      ],
+      "appliesTo": [
+        "heading"
+      ],
+      "density": {
+        "per": "document",
+        "threshold": 3,
+        "below": 0.3
+      },
+      "examples": {
+        "flag": [
+          "🚀 Features",
+          "✨ Getting Started"
+        ],
+        "pass": [
+          "Features"
+        ]
+      }
+    },
+    {
+      "id": "empower",
+      "lang": "en",
+      "kind": "structural",
+      "category": "buzzword",
+      "weight": 3,
+      "severity": "warn",
+      "message": "\"empower\"",
+      "docs": "Say what the reader can do that they could not before.",
+      "match": {
+        "type": "words",
+        "words": [
+          "empower",
+          "empowers",
+          "empowered",
+          "empowering"
+        ]
+      },
+      "examples": {
+        "flag": [
+          "We empower developers to move faster."
+        ],
+        "pass": [
+          "Developers can deploy without filing a ticket."
+        ]
+      }
+    },
+    {
+      "id": "endeavor",
+      "lang": "en",
+      "kind": "structural",
+      "category": "plain-words",
+      "weight": 2,
+      "severity": "warn",
+      "message": "\"endeavor\"",
+      "docs": "Use \"try\", or name the work.",
+      "match": {
+        "type": "words",
+        "words": [
+          "endeavor",
+          "endeavors",
+          "endeavour",
+          "endeavours",
+          "endeavoring",
+          "endeavouring"
+        ]
+      },
+      "examples": {
+        "flag": [
+          "We endeavor to respond within a day."
+        ],
+        "pass": [
+          "We reply within a day."
+        ]
+      }
+    },
+    {
+      "id": "ever-evolving",
+      "lang": "en",
+      "kind": "mechanical",
+      "category": "opener-closer",
+      "weight": 6,
+      "severity": "warn",
+      "message": "\"ever-evolving\" / \"ever-changing\"",
+      "docs": "Every field evolves. Delete the phrase.",
+      "match": {
+        "type": "phrases",
+        "phrases": [
+          "in the ever-evolving landscape of",
+          "in the ever-changing landscape of",
+          "the ever-evolving world of",
+          "ever-evolving",
+          "ever-changing"
+        ]
+      },
+      "fix": {
+        "type": "delete",
+        "cleanup": [
+          "collapse-space",
+          "dangling-comma",
+          "recapitalize"
+        ]
+      },
+      "examples": {
+        "flag": [
+          "In the ever-evolving landscape of security, patching matters."
+        ],
+        "pass": [
+          "Security patches ship every Tuesday."
+        ]
+      }
+    },
+    {
+      "id": "exclamation-density",
+      "lang": "en",
+      "kind": "structural",
+      "category": "punctuation",
+      "weight": 2,
+      "severity": "warn",
+      "message": "Exclamation marks",
+      "docs": "Enthusiasm stacked on every sentence reads as generated. Keep at most one.",
+      "match": {
+        "type": "chars",
+        "chars": [
+          "!"
+        ]
+      },
+      "density": {
+        "per": "block",
+        "threshold": 3,
+        "below": 0.1
+      },
+      "examples": {
+        "flag": [
+          "Ship faster! Build better! Scale further!"
+        ],
+        "pass": [
+          "Ship faster. It really works."
+        ]
+      }
+    },
+    {
+      "id": "facilitate",
+      "lang": "en",
+      "kind": "structural",
+      "category": "plain-words",
+      "weight": 2,
+      "severity": "warn",
+      "message": "\"facilitate\"",
+      "docs": "Say what actually happens: help, run, host, or simply do.",
+      "match": {
+        "type": "words",
+        "words": [
+          "facilitate",
+          "facilitates",
+          "facilitated",
+          "facilitating"
+        ]
+      },
+      "examples": {
+        "flag": [
+          "The platform facilitates collaboration."
+        ],
+        "pass": [
+          "The platform lets two people edit at once."
+        ]
+      }
+    },
+    {
+      "id": "fast-paced-world",
+      "lang": "en",
+      "kind": "mechanical",
+      "category": "opener-closer",
+      "weight": 8,
+      "severity": "warn",
+      "message": "\"In today's fast-paced world\"",
+      "docs": "The most recognizable generated opener there is. Start with the reader's problem.",
+      "match": {
+        "type": "phrases",
+        "phrases": [
+          "in today's fast-paced world",
+          "in today's fast paced world",
+          "in todays fast-paced world",
+          "in today's digital age",
+          "in today's digital landscape",
+          "in the modern era"
+        ]
+      },
+      "fix": {
+        "type": "delete",
+        "cleanup": [
+          "collapse-space",
+          "dangling-comma",
+          "recapitalize"
+        ]
+      },
+      "examples": {
+        "flag": [
+          "In today's fast-paced world, teams need better tools."
+        ],
+        "pass": [
+          "Teams waste an hour a day on manual releases."
+        ]
+      }
+    },
+    {
+      "id": "from-x-to-y",
+      "lang": "en",
+      "kind": "structural",
+      "category": "construction",
+      "weight": 3,
+      "severity": "warn",
+      "message": "\"from X to Y\" range formula",
+      "docs": "Naming both ends of a spectrum is a way of saying \"everyone\". Name your actual user.",
+      "match": {
+        "type": "detector",
+        "detector": "from-x-to-y",
+        "params": {
+          "maxGap": 4
+        }
+      },
+      "examples": {
+        "flag": [
+          "From startups to enterprises, teams rely on it."
+        ],
+        "pass": [
+          "Migrate from Postgres to MySQL in one command."
+        ]
+      }
+    },
+    {
+      "id": "game-changer",
+      "lang": "en",
+      "kind": "structural",
+      "category": "buzzword",
+      "weight": 3,
+      "severity": "warn",
+      "message": "Game-changer",
+      "docs": "Describe what changes for the reader.",
+      "match": {
+        "type": "phrases",
+        "phrases": [
+          "game changer",
+          "game-changer",
+          "game changing",
+          "game-changing"
+        ]
+      },
+      "examples": {
+        "flag": [
+          "This is a game-changer for small teams."
+        ],
+        "pass": [
+          "Small teams cut review time in half."
+        ]
+      }
+    },
+    {
+      "id": "genuinely",
+      "lang": "en",
+      "kind": "mechanical",
+      "category": "intensifier",
+      "weight": 2,
+      "severity": "warn",
+      "message": "\"genuinely\"",
+      "docs": "Claiming sincerity rarely conveys it.",
+      "match": {
+        "type": "words",
+        "words": [
+          "genuinely"
+        ]
+      },
+      "fix": {
+        "type": "delete",
+        "cleanup": [
+          "collapse-space"
+        ]
+      },
+      "examples": {
+        "flag": [
+          "We genuinely care about your data."
+        ],
+        "pass": [
+          "We delete your data within 30 days."
+        ]
+      }
+    },
+    {
+      "id": "heres-the-thing",
+      "lang": "en",
+      "kind": "structural",
+      "category": "opener-closer",
+      "weight": 3,
+      "severity": "warn",
+      "message": "\"here's the thing\"",
+      "docs": "Conversational filler. Say the thing.",
+      "match": {
+        "type": "phrases",
+        "phrases": [
+          "here's the thing",
+          "heres the thing",
+          "here's the kicker",
+          "but here's the best part"
+        ]
+      },
+      "examples": {
+        "flag": [
+          "Here's the thing, most linters are slow."
+        ],
+        "pass": [
+          "Most linters take 30 seconds on this repo."
+        ]
+      }
+    },
+    {
+      "id": "holistic",
+      "lang": "en",
+      "kind": "structural",
+      "category": "buzzword",
+      "weight": 2,
+      "severity": "warn",
+      "message": "\"holistic\"",
+      "docs": "Say which parts are covered.",
+      "match": {
+        "type": "words",
+        "words": [
+          "holistic",
+          "holistically"
+        ]
+      },
+      "examples": {
+        "flag": [
+          "A holistic approach to observability."
+        ],
+        "pass": [
+          "Logs, metrics and traces in one place."
+        ]
+      }
+    },
+    {
+      "id": "imagine-opener",
+      "lang": "en",
+      "kind": "structural",
+      "category": "opener-closer",
+      "weight": 4,
+      "severity": "warn",
+      "message": "\"Imagine…\" opener",
+      "docs": "Asking the reader to imagine a scenario is a generated-essay habit. Show the real thing.",
+      "match": {
+        "type": "regex",
+        "pattern": "(?:^|[.!?]\\s+)imagine\\b"
+      },
+      "examples": {
+        "flag": [
+          "Imagine a world where builds never break."
+        ],
+        "pass": [
+          "Builds have not broken in 90 days."
+        ]
+      }
+    },
+    {
+      "id": "in-order-to",
+      "lang": "en",
+      "kind": "mechanical",
+      "category": "plain-words",
+      "weight": 2,
+      "severity": "warn",
+      "message": "\"in order to\"",
+      "docs": "\"to\" says the same thing.",
+      "match": {
+        "type": "phrases",
+        "phrases": [
+          "in order to"
+        ]
+      },
+      "fix": {
+        "type": "replace",
+        "map": {
+          "*": "to"
+        }
+      },
+      "examples": {
+        "flag": [
+          "Restart the server in order to apply changes."
+        ],
+        "pass": [
+          "Restart the server to apply changes."
+        ]
+      }
+    },
+    {
+      "id": "incredibly",
+      "lang": "en",
+      "kind": "mechanical",
+      "category": "intensifier",
+      "weight": 2,
+      "severity": "warn",
+      "message": "\"incredibly\"",
+      "docs": "Replace the intensifier with a number.",
+      "match": {
+        "type": "words",
+        "words": [
+          "incredibly"
+        ]
+      },
+      "fix": {
+        "type": "delete",
+        "cleanup": [
+          "collapse-space"
+        ]
+      },
+      "examples": {
+        "flag": [
+          "It is incredibly fast under load."
+        ],
+        "pass": [
+          "It answers in 40ms under load."
+        ]
+      }
+    },
+    {
+      "id": "leverage-verb",
+      "lang": "en",
+      "kind": "mechanical",
+      "category": "plain-words",
+      "weight": 3,
+      "severity": "warn",
+      "message": "\"leverage\" as a verb",
+      "docs": "Use \"use\". Keep \"leverage\" for the financial noun.",
+      "match": {
+        "type": "words",
+        "tag": "VERB",
+        "words": [
+          "leverage",
+          "leverages",
+          "leveraged",
+          "leveraging"
+        ]
+      },
+      "fix": {
+        "type": "replace",
+        "map": {
+          "leverage": "use",
+          "leverages": "uses",
+          "leveraged": "used",
+          "leveraging": "using"
+        }
+      },
+      "examples": {
+        "flag": [
+          "We leverage caching to stay fast."
+        ],
+        "pass": [
+          "The fund reduced its leverage."
+        ]
+      }
+    },
+    {
+      "id": "look-no-further",
+      "lang": "en",
+      "kind": "structural",
+      "category": "opener-closer",
+      "weight": 5,
+      "severity": "warn",
+      "message": "\"look no further\"",
+      "docs": "Advertising copy. Say what the thing does.",
+      "match": {
+        "type": "phrases",
+        "phrases": [
+          "look no further"
+        ]
+      },
+      "examples": {
+        "flag": [
+          "Need a faster linter? Look no further."
+        ],
+        "pass": [
+          "This linter checks 1,000 files a second."
+        ]
+      }
+    },
+    {
+      "id": "meticulously",
+      "lang": "en",
+      "kind": "structural",
+      "category": "buzzword",
+      "weight": 3,
+      "severity": "warn",
+      "message": "Meticulous / meticulously",
+      "docs": "Show the care rather than asserting it.",
+      "match": {
+        "type": "words",
+        "words": [
+          "meticulous",
+          "meticulously"
+        ]
+      },
+      "examples": {
+        "flag": [
+          "Meticulously crafted components."
+        ],
+        "pass": [
+          "Every component ships with tests."
+        ]
+      }
+    },
+    {
+      "id": "myriad-of",
+      "lang": "en",
+      "kind": "mechanical",
+      "category": "plain-words",
+      "weight": 2,
+      "severity": "warn",
+      "message": "\"a myriad of\"",
+      "docs": "Use \"many\", or give the number.",
+      "match": {
+        "type": "phrases",
+        "phrases": [
+          "a myriad of"
+        ]
+      },
+      "fix": {
+        "type": "replace",
+        "map": {
+          "*": "many"
+        }
+      },
+      "examples": {
+        "flag": [
+          "A myriad of integrations ship today."
+        ],
+        "pass": [
+          "Many integrations ship today."
+        ]
+      }
+    },
+    {
+      "id": "next-level",
+      "lang": "en",
+      "kind": "structural",
+      "category": "buzzword",
+      "weight": 3,
+      "severity": "warn",
+      "message": "Next-level / take it to the next level",
+      "docs": "Say which level, or drop the phrase.",
+      "match": {
+        "type": "phrases",
+        "phrases": [
+          "next level",
+          "next-level",
+          "to the next level"
+        ]
+      },
+      "examples": {
+        "flag": [
+          "Take your workflow to the next level."
+        ],
+        "pass": [
+          "Cut your release checklist to three steps."
+        ]
+      }
+    },
+    {
+      "id": "no-x-no-y-just-z",
+      "lang": "en",
+      "kind": "structural",
+      "category": "construction",
+      "weight": 5,
+      "severity": "warn",
+      "message": "\"No X. No Y. Just Z.\" construction",
+      "docs": "The negation-then-payoff rhythm reads as an advertisement.",
+      "match": {
+        "type": "detector",
+        "detector": "negation-triplet",
+        "params": {
+          "negators": [
+            "no",
+            "never",
+            "zero"
+          ],
+          "closers": [
+            "just",
+            "only",
+            "simply"
+          ],
+          "minNegations": 2
+        }
+      },
+      "examples": {
+        "flag": [
+          "No setup. No config. Just code."
+        ],
+        "pass": [
+          "No configuration is required for small projects."
+        ]
+      }
+    },
+    {
+      "id": "not-just-x-its-y",
+      "lang": "en",
+      "kind": "structural",
+      "category": "construction",
+      "weight": 6,
+      "severity": "warn",
+      "message": "\"not just X, it's Y\" construction",
+      "docs": "Say what it is. Defining by contrast with what it is not is the signature AI cadence.",
+      "match": {
+        "type": "detector",
+        "detector": "contrastive-negation",
+        "params": {
+          "negators": [
+            "not just",
+            "isn't just",
+            "is not just",
+            "not only",
+            "more than just",
+            "isn't about",
+            "is not about",
+            "not merely"
+          ],
+          "pivots": [
+            "it's",
+            "it is",
+            "they're",
+            "but",
+            "but also",
+            "it's about"
+          ],
+          "maxGap": 12
+        }
+      },
+      "examples": {
+        "flag": [
+          "It's not just a tool, it's a workflow.",
+          "This isn't just about speed, it's about confidence."
+        ],
+        "pass": [
+          "This is not just for admins; editors can use it too.",
+          "It is more than we expected."
+        ]
+      }
+    },
+    {
+      "id": "parallel-pair",
+      "lang": "en",
+      "kind": "structural",
+      "category": "construction",
+      "weight": 4,
+      "severity": "warn",
+      "message": "Parallel participle pair (\"Built for X. Designed for Y.\")",
+      "docs": "Matched sentence openings are a rhythm device. One plain sentence usually carries more.",
+      "match": {
+        "type": "detector",
+        "detector": "parallel-pair",
+        "params": {
+          "openers": [
+            "built",
+            "designed",
+            "made",
+            "crafted",
+            "engineered",
+            "optimized",
+            "optimised"
+          ],
+          "maxWords": 6
+        }
+      },
+      "examples": {
+        "flag": [
+          "Built for speed. Designed for teams."
+        ],
+        "pass": [
+          "Built for speed, it answers in 40ms and runs on one core."
+        ]
+      }
+    },
+    {
+      "id": "pivotal-crucial",
+      "lang": "en",
+      "kind": "structural",
+      "category": "buzzword",
+      "weight": 2,
+      "severity": "warn",
+      "message": "Pivotal / crucial / vital",
+      "docs": "If it matters, the reason will show it.",
+      "match": {
+        "type": "words",
+        "words": [
+          "pivotal",
+          "crucial",
+          "vital"
+        ]
+      },
+      "examples": {
+        "flag": [
+          "Caching plays a pivotal role in performance."
+        ],
+        "pass": [
+          "Caching cuts page loads from 800ms to 90ms."
+        ]
+      }
+    },
+    {
+      "id": "plethora",
+      "lang": "en",
+      "kind": "mechanical",
+      "category": "plain-words",
+      "weight": 3,
+      "severity": "warn",
+      "message": "\"a plethora of\"",
+      "docs": "Use \"many\", or give the number.",
+      "match": {
+        "type": "phrases",
+        "phrases": [
+          "a plethora of"
+        ]
+      },
+      "fix": {
+        "type": "replace",
+        "map": {
+          "*": "many"
+        }
+      },
+      "examples": {
+        "flag": [
+          "It offers a plethora of options."
+        ],
+        "pass": [
+          "It offers many options."
+        ]
+      }
+    },
+    {
+      "id": "revolutionize",
+      "lang": "en",
+      "kind": "structural",
+      "category": "buzzword",
+      "weight": 3,
+      "severity": "warn",
+      "message": "\"revolutionize\"",
+      "docs": "Almost nothing revolutionizes an industry. Describe the actual change.",
+      "match": {
+        "type": "words",
+        "words": [
+          "revolutionize",
+          "revolutionizes",
+          "revolutionizing",
+          "revolutionise",
+          "revolutionises",
+          "revolutionising"
+        ]
+      },
+      "examples": {
+        "flag": [
+          "We revolutionize how teams ship software."
+        ],
+        "pass": [
+          "Teams ship without a release manager."
+        ]
+      }
+    },
+    {
+      "id": "rhetorical-question",
+      "lang": "en",
+      "kind": "structural",
+      "category": "construction",
+      "weight": 4,
+      "severity": "warn",
+      "message": "Rhetorical question answered immediately",
+      "docs": "Asking a question to answer it yourself pads the copy. State the answer.",
+      "match": {
+        "type": "detector",
+        "detector": "rhetorical-qa",
+        "params": {
+          "maxQuestionWords": 5,
+          "maxAnswerWords": 12
+        }
+      },
+      "examples": {
+        "flag": [
+          "The best part? There isn't one.",
+          "Why does it matter? Because speed compounds."
+        ],
+        "pass": [
+          "How do I install it? Run npm install voxfold, then add a config file and run it once."
+        ]
+      }
+    },
+    {
+      "id": "robust",
+      "lang": "en",
+      "kind": "structural",
+      "category": "intensifier",
+      "weight": 3,
+      "severity": "warn",
+      "message": "\"robust\"",
+      "docs": "Say what makes it robust: retries, tests, uptime.",
+      "match": {
+        "type": "words",
+        "tag": "ADJ",
+        "words": [
+          "robust"
+        ]
+      },
+      "examples": {
+        "flag": [
+          "A robust platform for growing teams."
+        ],
+        "pass": [
+          "It retries failed jobs three times.",
+          "Robustness testing runs every night."
+        ]
+      }
+    },
+    {
+      "id": "say-goodbye-to",
+      "lang": "en",
+      "kind": "structural",
+      "category": "opener-closer",
+      "weight": 4,
+      "severity": "warn",
+      "message": "\"say goodbye to\"",
+      "docs": "Name what replaces it instead.",
+      "match": {
+        "type": "phrases",
+        "phrases": [
+          "say goodbye to",
+          "say hello to",
+          "wave goodbye to"
+        ]
+      },
+      "examples": {
+        "flag": [
+          "Say goodbye to flaky tests."
+        ],
+        "pass": [
+          "Retries removed 90% of flaky failures."
+        ]
+      }
+    },
+    {
+      "id": "seamlessly",
+      "lang": "en",
+      "kind": "mechanical",
+      "category": "intensifier",
+      "weight": 4,
+      "severity": "warn",
+      "message": "\"seamlessly\"",
+      "docs": "Everything claims to be seamless. Delete it, or say what the integration actually does.",
+      "match": {
+        "type": "words",
+        "words": [
+          "seamlessly",
+          "seamless"
+        ]
+      },
+      "fix": {
+        "type": "delete",
+        "cleanup": [
+          "collapse-space"
+        ]
+      },
+      "examples": {
+        "flag": [
+          "It integrates seamlessly with your stack.",
+          "A seamless experience across devices."
+        ],
+        "pass": [
+          "It integrates with GitHub and GitLab."
+        ]
+      }
+    },
+    {
+      "id": "simply",
+      "lang": "en",
+      "kind": "structural",
+      "category": "intensifier",
+      "weight": 1,
+      "severity": "warn",
+      "message": "\"simply\"",
+      "docs": "If it is simple, the steps will show it. Telling the reader it is easy can read as dismissive.",
+      "match": {
+        "type": "words",
+        "words": [
+          "simply"
+        ]
+      },
+      "examples": {
+        "flag": [
+          "Simply connect your repository and go."
+        ],
+        "pass": [
+          "Connect your repository, then pick a branch."
+        ]
+      }
+    },
+    {
+      "id": "streamline",
+      "lang": "en",
+      "kind": "structural",
+      "category": "buzzword",
+      "weight": 2,
+      "severity": "warn",
+      "message": "\"streamline\"",
+      "docs": "Name the step that disappears.",
+      "match": {
+        "type": "words",
+        "words": [
+          "streamline",
+          "streamlines",
+          "streamlined",
+          "streamlining"
+        ]
+      },
+      "examples": {
+        "flag": [
+          "It streamlines your entire workflow."
+        ],
+        "pass": [
+          "It removes the manual approval step."
+        ]
+      }
+    },
+    {
+      "id": "supercharge",
+      "lang": "en",
+      "kind": "structural",
+      "category": "buzzword",
+      "weight": 3,
+      "severity": "warn",
+      "message": "Supercharge / turbocharge",
+      "docs": "Give the speed-up as a number.",
+      "match": {
+        "type": "words",
+        "words": [
+          "supercharge",
+          "supercharges",
+          "supercharged",
+          "supercharging",
+          "turbocharge",
+          "turbocharged"
+        ]
+      },
+      "examples": {
+        "flag": [
+          "Supercharge your build pipeline."
+        ],
+        "pass": [
+          "Builds finish 3x faster."
+        ]
+      }
+    },
+    {
+      "id": "tricolon",
+      "lang": "en",
+      "kind": "structural",
+      "category": "construction",
+      "weight": 5,
+      "severity": "warn",
+      "message": "Three-part fragment rhythm (\"Fast. Simple. Secure.\")",
+      "docs": "Three one-word sentences in a row is a rhetorical flourish, not information.",
+      "match": {
+        "type": "detector",
+        "detector": "tricolon-fragments",
+        "params": {
+          "minRun": 3,
+          "maxWords": 2
+        }
+      },
+      "skipIn": [
+        "listItem"
+      ],
+      "examples": {
+        "flag": [
+          "Fast. Simple. Secure.",
+          "Plan. Build. Ship."
+        ],
+        "pass": [
+          "Install the CLI. Add a config file. Run the linter."
+        ]
+      }
+    },
+    {
+      "id": "truly",
+      "lang": "en",
+      "kind": "mechanical",
+      "category": "intensifier",
+      "weight": 2,
+      "severity": "warn",
+      "message": "\"truly\"",
+      "docs": "The sentence is as true without it.",
+      "match": {
+        "type": "words",
+        "words": [
+          "truly"
+        ]
+      },
+      "fix": {
+        "type": "delete",
+        "cleanup": [
+          "collapse-space"
+        ]
+      },
+      "examples": {
+        "flag": [
+          "This is truly the fastest option."
+        ],
+        "pass": [
+          "This is the fastest option we measured."
+        ]
+      }
+    },
+    {
+      "id": "unlock-unleash",
+      "lang": "en",
+      "kind": "structural",
+      "category": "buzzword",
+      "weight": 3,
+      "severity": "warn",
+      "message": "Unlock / unleash",
+      "docs": "Nothing was locked. Say what the reader can now do.",
+      "match": {
+        "type": "regex",
+        "pattern": "\\b(?:unlock|unlocks|unlocking|unleash|unleashes|unleashing)\\b[^.!?]{0,30}?\\b(?:potential|power|value|growth|insight|insights|productivity|creativity|efficiency|possibilities|capabilities)\\b"
+      },
+      "examples": {
+        "flag": [
+          "Unlock your team's potential today.",
+          "Unleash the power of your data."
+        ],
+        "pass": [
+          "Unlock the door with your badge.",
+          "Unlock your account from the settings page."
+        ]
+      }
+    },
+    {
+      "id": "utilize",
+      "lang": "en",
+      "kind": "mechanical",
+      "category": "plain-words",
+      "weight": 3,
+      "severity": "warn",
+      "message": "\"utilize\" instead of \"use\"",
+      "docs": "Use \"use\". It is shorter and means the same thing.",
+      "match": {
+        "type": "words",
+        "words": [
+          "utilize",
+          "utilizes",
+          "utilized",
+          "utilizing",
+          "utilise",
+          "utilises",
+          "utilised",
+          "utilising"
+        ]
+      },
+      "fix": {
+        "type": "replace",
+        "map": {
+          "utilize": "use",
+          "utilizes": "uses",
+          "utilized": "used",
+          "utilizing": "using",
+          "utilise": "use",
+          "utilises": "uses",
+          "utilised": "used",
+          "utilising": "using"
+        }
+      },
+      "examples": {
+        "flag": [
+          "We utilize modern tooling.",
+          "The team utilized every option."
+        ],
+        "pass": [
+          "We use modern tooling."
+        ]
+      }
+    },
+    {
+      "id": "whether-youre",
+      "lang": "en",
+      "kind": "structural",
+      "category": "opener-closer",
+      "weight": 5,
+      "severity": "warn",
+      "message": "\"whether you're X or Y\"",
+      "docs": "A formula for addressing everyone at once. Write to one reader.",
+      "match": {
+        "type": "regex",
+        "pattern": "whether you(?:'re| are)\\b[^.!?]{1,60}?\\bor\\b"
+      },
+      "examples": {
+        "flag": [
+          "Whether you're a solo developer or a large team, it fits."
+        ],
+        "pass": [
+          "It works for teams of up to 50 people."
+        ]
+      }
+    },
+    {
+      "id": "world-class",
+      "lang": "en",
+      "kind": "structural",
+      "category": "buzzword",
+      "weight": 3,
+      "severity": "warn",
+      "message": "World-class / best-in-class",
+      "docs": "Compared with what? Give the benchmark or drop the claim.",
+      "match": {
+        "type": "phrases",
+        "phrases": [
+          "world class",
+          "world-class",
+          "best in class",
+          "best-in-class",
+          "industry leading",
+          "industry-leading"
+        ]
+      },
+      "examples": {
+        "flag": [
+          "World-class support, around the clock."
+        ],
+        "pass": [
+          "Support replies within four hours."
+        ]
+      }
+    },
+    {
+      "id": "worth-noting",
+      "lang": "en",
+      "kind": "mechanical",
+      "category": "opener-closer",
+      "weight": 3,
+      "severity": "warn",
+      "message": "\"it's worth noting that\"",
+      "docs": "Note it. The preamble adds nothing.",
+      "match": {
+        "type": "phrases",
+        "phrases": [
+          "it's worth noting that",
+          "it is worth noting that",
+          "it's important to note that",
+          "it is important to note that"
+        ]
+      },
+      "fix": {
+        "type": "delete",
+        "cleanup": [
+          "collapse-space",
+          "recapitalize"
+        ]
+      },
+      "examples": {
+        "flag": [
+          "It's worth noting that the API is rate limited."
+        ],
+        "pass": [
+          "The API allows 100 requests a minute."
+        ]
+      }
+    },
+    {
+      "id": "x-meets-y",
+      "lang": "en",
+      "kind": "structural",
+      "category": "construction",
+      "weight": 4,
+      "severity": "warn",
+      "message": "\"X meets Y\" formula",
+      "docs": "A slogan shape. Describe the combination plainly.",
+      "match": {
+        "type": "detector",
+        "detector": "x-meets-y",
+        "params": {
+          "verbs": [
+            "meets"
+          ]
+        }
+      },
+      "examples": {
+        "flag": [
+          "Where design meets engineering."
+        ],
+        "pass": [
+          "The team meets every Tuesday."
+        ]
+      }
+    }
+  ]
+}

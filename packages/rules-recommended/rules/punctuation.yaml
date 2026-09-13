@@ -1,0 +1,106 @@
+# Punctuation tells.
+#
+# Density matters most here: one em dash is a writer's choice, three in a paragraph is a pattern.
+# Every occurrence is still flagged so nothing is hidden; the score cost is what changes.
+
+- id: em-dash
+  lang: en
+  kind: mechanical
+  category: punctuation
+  weight: 3
+  severity: warn
+  message: Em dash
+  docs: Em dashes cluster in generated copy. A comma, colon or full stop is usually clearer.
+  match:
+    type: chars
+    chars: ["—"]
+  density:
+    per: block
+    threshold: 3
+    below: 0.2
+  densityOverrides:
+    heading:
+      threshold: 5
+  suggest:
+    - label: comma
+      replace: ", "
+    - label: full stop
+      replace: ". "
+      recapitalize: true
+    - label: colon
+      replace: ": "
+  # Every em dash is flagged; density decides what it costs. A lone dash in a long paragraph
+  # barely moves the score, three in one paragraph move it a lot.
+  examples:
+    flag:
+      - It ships fast—really fast—and it scales—quietly.
+    pass:
+      - It ships fast and scales well.
+      - A hyphen-joined word is fine.
+
+- id: double-hyphen-dash
+  lang: en
+  kind: mechanical
+  category: punctuation
+  weight: 2
+  severity: warn
+  message: Double hyphen used as a dash
+  docs: Write a real em dash, or restructure the sentence.
+  match:
+    type: regex
+    pattern: "\\s--\\s"
+  suggest:
+    - label: comma
+      replace: ", "
+    - label: full stop
+      replace: ". "
+      recapitalize: true
+  examples:
+    flag:
+      - It ships fast -- really fast.
+    pass:
+      - Run the command with --verbose to see more.
+
+- id: exclamation-density
+  lang: en
+  kind: structural
+  category: punctuation
+  weight: 2
+  severity: warn
+  message: Exclamation marks
+  docs: Enthusiasm stacked on every sentence reads as generated. Keep at most one.
+  match:
+    type: chars
+    chars: ["!"]
+  density:
+    per: block
+    threshold: 3
+    below: 0.1
+  examples:
+    flag:
+      - Ship faster! Build better! Scale further!
+    pass:
+      - Ship faster. It really works.
+
+- id: colon-reveal
+  lang: en
+  kind: structural
+  category: punctuation
+  weight: 3
+  severity: warn
+  message: Dramatic colon reveal
+  docs: "\"The result:\" builds suspense for a fact. State the fact."
+  match:
+    type: phrases
+    phrases:
+      - "the result:"
+      - "the best part:"
+      - "the catch:"
+      - "the kicker:"
+      - "here's the thing:"
+      - "the bottom line:"
+  examples:
+    flag:
+      - "The result: teams ship twice as often."
+    pass:
+      - "Result codes: 0 means success."

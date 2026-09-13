@@ -1,0 +1,299 @@
+# Marketing vocabulary that recurs heavily in generated copy. All flag-only: the right
+# replacement depends entirely on what the product actually does, which the tool cannot know.
+
+- id: cutting-edge
+  lang: en
+  kind: structural
+  category: buzzword
+  weight: 3
+  severity: warn
+  message: Cutting-edge / state-of-the-art
+  docs: Name the technology and the year instead.
+  match:
+    type: phrases
+    phrases: ["cutting edge", "cutting-edge", "state of the art", "state-of-the-art", "bleeding edge"]
+  examples:
+    flag:
+      - Built on cutting-edge infrastructure.
+    pass:
+      - Built on Postgres 17 and Redis.
+
+- id: game-changer
+  lang: en
+  kind: structural
+  category: buzzword
+  weight: 3
+  severity: warn
+  message: Game-changer
+  docs: Describe what changes for the reader.
+  match:
+    type: phrases
+    phrases: ["game changer", "game-changer", "game changing", "game-changing"]
+  examples:
+    flag:
+      - This is a game-changer for small teams.
+    pass:
+      - Small teams cut review time in half.
+
+- id: next-level
+  lang: en
+  kind: structural
+  category: buzzword
+  weight: 3
+  severity: warn
+  message: Next-level / take it to the next level
+  docs: Say which level, or drop the phrase.
+  match:
+    type: phrases
+    phrases: ["next level", "next-level", "to the next level"]
+  examples:
+    flag:
+      - Take your workflow to the next level.
+    pass:
+      - Cut your release checklist to three steps.
+
+- id: unlock-unleash
+  lang: en
+  kind: structural
+  category: buzzword
+  weight: 3
+  severity: warn
+  message: Unlock / unleash
+  docs: Nothing was locked. Say what the reader can now do.
+  # Only fires when the object is an abstraction: unlocking a door or an account is literal and
+  # perfectly good writing.
+  match:
+    type: regex
+    pattern: "\\b(?:unlock|unlocks|unlocking|unleash|unleashes|unleashing)\\b[^.!?]{0,30}?\\b(?:potential|power|value|growth|insight|insights|productivity|creativity|efficiency|possibilities|capabilities)\\b"
+  examples:
+    flag:
+      - Unlock your team's potential today.
+      - Unleash the power of your data.
+    pass:
+      - Unlock the door with your badge.
+      - Unlock your account from the settings page.
+
+- id: elevate
+  lang: en
+  kind: structural
+  category: buzzword
+  weight: 2
+  severity: warn
+  message: "\"elevate\""
+  docs: Use "improve", or name the change.
+  match:
+    type: words
+    tag: VERB
+    words: [elevate, elevates, elevating]
+  # Known limitation: a literal "elevate the platform by two metres" also flags. The word is
+  # rare enough in developer copy that the false positive is cheaper than the missed tell.
+  examples:
+    flag:
+      - Elevate your content strategy.
+    pass:
+      - Elevation data comes from the sensor.
+
+- id: supercharge
+  lang: en
+  kind: structural
+  category: buzzword
+  weight: 3
+  severity: warn
+  message: Supercharge / turbocharge
+  docs: Give the speed-up as a number.
+  match:
+    type: words
+    words: [supercharge, supercharges, supercharged, supercharging, turbocharge, turbocharged]
+  examples:
+    flag:
+      - Supercharge your build pipeline.
+    pass:
+      - Builds finish 3x faster.
+
+- id: revolutionize
+  lang: en
+  kind: structural
+  category: buzzword
+  weight: 3
+  severity: warn
+  message: "\"revolutionize\""
+  docs: Almost nothing revolutionizes an industry. Describe the actual change.
+  match:
+    type: words
+    words: [revolutionize, revolutionizes, revolutionizing, revolutionise, revolutionises, revolutionising]
+  examples:
+    flag:
+      - We revolutionize how teams ship software.
+    pass:
+      - Teams ship without a release manager.
+
+- id: empower
+  lang: en
+  kind: structural
+  category: buzzword
+  weight: 3
+  severity: warn
+  message: "\"empower\""
+  docs: Say what the reader can do that they could not before.
+  match:
+    type: words
+    words: [empower, empowers, empowered, empowering]
+  examples:
+    flag:
+      - We empower developers to move faster.
+    pass:
+      - Developers can deploy without filing a ticket.
+
+- id: streamline
+  lang: en
+  kind: structural
+  category: buzzword
+  weight: 2
+  severity: warn
+  message: "\"streamline\""
+  docs: Name the step that disappears.
+  match:
+    type: words
+    words: [streamline, streamlines, streamlined, streamlining]
+  examples:
+    flag:
+      - It streamlines your entire workflow.
+    pass:
+      - It removes the manual approval step.
+
+- id: delve
+  lang: en
+  kind: structural
+  category: buzzword
+  weight: 4
+  severity: warn
+  message: "\"delve\""
+  docs: Use "look at" or "cover".
+  match:
+    type: words
+    words: [delve, delves, delved, delving]
+  examples:
+    flag:
+      - Let's delve into the details.
+    pass:
+      - Here are the details.
+
+- id: ai-lexicon
+  lang: en
+  kind: structural
+  category: buzzword
+  weight: 4
+  severity: warn
+  message: Overused abstract noun (tapestry, testament, realm, landscape)
+  docs: These abstractions appear constantly in generated prose. Name the concrete thing.
+  match:
+    type: words
+    words: [tapestry, testament, realm, landscape, ecosystem, paradigm, synergy, synergies]
+  examples:
+    flag:
+      - A rich tapestry of integrations.
+      - In the ever-changing landscape of DevOps.
+    pass:
+      - It connects to 40 services.
+
+- id: holistic
+  lang: en
+  kind: structural
+  category: buzzword
+  weight: 2
+  severity: warn
+  message: "\"holistic\""
+  docs: Say which parts are covered.
+  match:
+    type: words
+    words: [holistic, holistically]
+  examples:
+    flag:
+      - A holistic approach to observability.
+    pass:
+      - Logs, metrics and traces in one place.
+
+- id: meticulously
+  lang: en
+  kind: structural
+  category: buzzword
+  weight: 3
+  severity: warn
+  message: Meticulous / meticulously
+  docs: Show the care rather than asserting it.
+  match:
+    type: words
+    words: [meticulous, meticulously]
+  examples:
+    flag:
+      - Meticulously crafted components.
+    pass:
+      - Every component ships with tests.
+
+- id: bespoke-curated
+  lang: en
+  kind: structural
+  category: buzzword
+  weight: 2
+  severity: warn
+  message: Bespoke / curated
+  docs: Use "custom", or say who chose it and why.
+  match:
+    type: words
+    words: [bespoke, curated, curation]
+  examples:
+    flag:
+      - A curated selection of bespoke templates.
+    pass:
+      - Twelve templates, chosen by our design team.
+
+- id: embark-journey
+  lang: en
+  kind: structural
+  category: buzzword
+  weight: 3
+  severity: warn
+  message: Embark / journey
+  docs: Using software is not a journey. Say what the first step is.
+  match:
+    type: phrases
+    phrases: ["embark on", "your journey", "the journey", "journey to", "journey towards"]
+  examples:
+    flag:
+      - Embark on your automation journey today.
+    pass:
+      - Install the CLI to get started.
+
+- id: world-class
+  lang: en
+  kind: structural
+  category: buzzword
+  weight: 3
+  severity: warn
+  message: World-class / best-in-class
+  docs: Compared with what? Give the benchmark or drop the claim.
+  match:
+    type: phrases
+    phrases: ["world class", "world-class", "best in class", "best-in-class", "industry leading", "industry-leading"]
+  examples:
+    flag:
+      - World-class support, around the clock.
+    pass:
+      - Support replies within four hours.
+
+- id: pivotal-crucial
+  lang: en
+  kind: structural
+  category: buzzword
+  weight: 2
+  severity: warn
+  message: Pivotal / crucial / vital
+  docs: If it matters, the reason will show it.
+  match:
+    type: words
+    words: [pivotal, crucial, vital]
+  examples:
+    flag:
+      - Caching plays a pivotal role in performance.
+    pass:
+      - Caching cuts page loads from 800ms to 90ms.

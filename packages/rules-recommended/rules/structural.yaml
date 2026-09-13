@@ -1,0 +1,193 @@
+# Structural tells: shapes rather than words. All flag-only by definition. There is no single
+# correct rewrite, so the tool names the pattern and a human writes the replacement.
+
+- id: not-just-x-its-y
+  lang: en
+  kind: structural
+  category: construction
+  weight: 6
+  severity: warn
+  message: "\"not just X, it's Y\" construction"
+  docs: Say what it is. Defining by contrast with what it is not is the signature AI cadence.
+  match:
+    type: detector
+    detector: contrastive-negation
+    params:
+      negators:
+        - "not just"
+        - "isn't just"
+        - "is not just"
+        - "not only"
+        - "more than just"
+        - "isn't about"
+        - "is not about"
+        - "not merely"
+      pivots:
+        - "it's"
+        - "it is"
+        - "they're"
+        - "but"
+        - "but also"
+        - "it's about"
+      maxGap: 12
+  examples:
+    flag:
+      - It's not just a tool, it's a workflow.
+      - This isn't just about speed, it's about confidence.
+    pass:
+      - This is not just for admins; editors can use it too.
+      - It is more than we expected.
+
+- id: tricolon
+  lang: en
+  kind: structural
+  category: construction
+  weight: 5
+  severity: warn
+  message: Three-part fragment rhythm ("Fast. Simple. Secure.")
+  docs: Three one-word sentences in a row is a rhetorical flourish, not information.
+  match:
+    type: detector
+    detector: tricolon-fragments
+    params:
+      minRun: 3
+      maxWords: 2
+  skipIn: [listItem]
+  examples:
+    flag:
+      - Fast. Simple. Secure.
+      - Plan. Build. Ship.
+    pass:
+      - Install the CLI. Add a config file. Run the linter.
+
+- id: no-x-no-y-just-z
+  lang: en
+  kind: structural
+  category: construction
+  weight: 5
+  severity: warn
+  message: "\"No X. No Y. Just Z.\" construction"
+  docs: The negation-then-payoff rhythm reads as an advertisement.
+  match:
+    type: detector
+    detector: negation-triplet
+    params:
+      negators: [no, never, zero]
+      closers: [just, only, simply]
+      minNegations: 2
+  examples:
+    flag:
+      - No setup. No config. Just code.
+    pass:
+      - No configuration is required for small projects.
+
+- id: rhetorical-question
+  lang: en
+  kind: structural
+  category: construction
+  weight: 4
+  severity: warn
+  message: Rhetorical question answered immediately
+  docs: Asking a question to answer it yourself pads the copy. State the answer.
+  match:
+    type: detector
+    detector: rhetorical-qa
+    params:
+      maxQuestionWords: 5
+      maxAnswerWords: 12
+  examples:
+    flag:
+      - The best part? There isn't one.
+      - Why does it matter? Because speed compounds.
+    pass:
+      - How do I install it? Run npm install voxfold, then add a config file and run it once.
+
+- id: x-meets-y
+  lang: en
+  kind: structural
+  category: construction
+  weight: 4
+  severity: warn
+  message: "\"X meets Y\" formula"
+  docs: A slogan shape. Describe the combination plainly.
+  match:
+    type: detector
+    detector: x-meets-y
+    params:
+      verbs: [meets]
+  examples:
+    flag:
+      - Where design meets engineering.
+    pass:
+      - The team meets every Tuesday.
+
+- id: from-x-to-y
+  lang: en
+  kind: structural
+  category: construction
+  weight: 3
+  severity: warn
+  message: "\"from X to Y\" range formula"
+  docs: Naming both ends of a spectrum is a way of saying "everyone". Name your actual user.
+  match:
+    type: detector
+    detector: from-x-to-y
+    params:
+      maxGap: 4
+  examples:
+    flag:
+      - From startups to enterprises, teams rely on it.
+    pass:
+      - Migrate from Postgres to MySQL in one command.
+
+- id: parallel-pair
+  lang: en
+  kind: structural
+  category: construction
+  weight: 4
+  severity: warn
+  message: Parallel participle pair ("Built for X. Designed for Y.")
+  docs: Matched sentence openings are a rhythm device. One plain sentence usually carries more.
+  match:
+    type: detector
+    detector: parallel-pair
+    params:
+      openers: [built, designed, made, crafted, engineered, optimized, optimised]
+      maxWords: 6
+  examples:
+    flag:
+      - Built for speed. Designed for teams.
+    pass:
+      - Built for speed, it answers in 40ms and runs on one core.
+
+- id: adverb-inanimate-subject
+  lang: en
+  kind: structural
+  category: inanimate-adverb
+  weight: 5
+  severity: warn
+  message: Manner adverb on a thing that cannot act
+  docs: "\"The dashboard quietly syncs\" gives feelings to software. Say what it does."
+  match:
+    type: detector
+    detector: adverb-inanimate-subject
+    params:
+      adverbs:
+        - quietly
+        - gently
+        - silently
+        - gracefully
+        - elegantly
+        - thoughtfully
+        - beautifully
+        - intelligently
+        - patiently
+        - happily
+        - lovingly
+  examples:
+    flag:
+      - The dashboard quietly syncs your data.
+      - The parser gracefully handles errors.
+    pass:
+      - She quietly left the room.
+      - Our team gently reminds customers before renewal.

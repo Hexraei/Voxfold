@@ -1,0 +1,205 @@
+# Opening and closing formulas. These are the strongest single tells in generated copy, so they
+# carry the heaviest weights in the set.
+
+- id: fast-paced-world
+  lang: en
+  kind: mechanical
+  category: opener-closer
+  weight: 8
+  severity: warn
+  message: "\"In today's fast-paced world\""
+  docs: The most recognizable generated opener there is. Start with the reader's problem.
+  match:
+    type: phrases
+    phrases:
+      - "in today's fast-paced world"
+      - "in today's fast paced world"
+      - "in todays fast-paced world"
+      - "in today's digital age"
+      - "in today's digital landscape"
+      - "in the modern era"
+  fix:
+    type: delete
+    cleanup: [collapse-space, dangling-comma, recapitalize]
+  examples:
+    flag:
+      - In today's fast-paced world, teams need better tools.
+    pass:
+      - Teams waste an hour a day on manual releases.
+
+- id: ever-evolving
+  lang: en
+  kind: mechanical
+  category: opener-closer
+  weight: 6
+  severity: warn
+  message: "\"ever-evolving\" / \"ever-changing\""
+  docs: Every field evolves. Delete the phrase.
+  match:
+    type: phrases
+    phrases:
+      - "in the ever-evolving landscape of"
+      - "in the ever-changing landscape of"
+      - "the ever-evolving world of"
+      - "ever-evolving"
+      - "ever-changing"
+  fix:
+    type: delete
+    cleanup: [collapse-space, dangling-comma, recapitalize]
+  examples:
+    flag:
+      - In the ever-evolving landscape of security, patching matters.
+    pass:
+      - Security patches ship every Tuesday.
+
+- id: worth-noting
+  lang: en
+  kind: mechanical
+  category: opener-closer
+  weight: 3
+  severity: warn
+  message: "\"it's worth noting that\""
+  docs: Note it. The preamble adds nothing.
+  match:
+    type: phrases
+    phrases:
+      - "it's worth noting that"
+      - "it is worth noting that"
+      - "it's important to note that"
+      - "it is important to note that"
+  fix:
+    type: delete
+    cleanup: [collapse-space, recapitalize]
+  examples:
+    flag:
+      - It's worth noting that the API is rate limited.
+    pass:
+      - The API allows 100 requests a minute.
+
+- id: dive-in
+  lang: en
+  kind: mechanical
+  category: opener-closer
+  weight: 4
+  severity: warn
+  message: "\"let's dive in\" / \"without further ado\""
+  docs: Filler before the actual content. Delete it.
+  match:
+    type: phrases
+    phrases:
+      - "let's dive in"
+      - "lets dive in"
+      - "let's dive into"
+      - "without further ado"
+      - "let's get started"
+      - "let's take a look"
+  fix:
+    type: delete
+    cleanup: [collapse-space, dangling-comma, recapitalize]
+  examples:
+    flag:
+      - Without further ado, here is the config.
+    pass:
+      - Here is the config.
+
+- id: look-no-further
+  lang: en
+  kind: structural
+  category: opener-closer
+  weight: 5
+  severity: warn
+  message: "\"look no further\""
+  docs: Advertising copy. Say what the thing does.
+  match:
+    type: phrases
+    phrases: ["look no further"]
+  examples:
+    flag:
+      - Need a faster linter? Look no further.
+    pass:
+      - This linter checks 1,000 files a second.
+
+- id: say-goodbye-to
+  lang: en
+  kind: structural
+  category: opener-closer
+  weight: 4
+  severity: warn
+  message: "\"say goodbye to\""
+  docs: Name what replaces it instead.
+  match:
+    type: phrases
+    phrases: ["say goodbye to", "say hello to", "wave goodbye to"]
+  examples:
+    flag:
+      - Say goodbye to flaky tests.
+    pass:
+      - Retries removed 90% of flaky failures.
+
+- id: at-the-end-of-the-day
+  lang: en
+  kind: structural
+  category: opener-closer
+  weight: 3
+  severity: warn
+  message: "\"at the end of the day\""
+  docs: A filler transition. Delete it or state the conclusion.
+  match:
+    type: phrases
+    phrases: ["at the end of the day"]
+  examples:
+    flag:
+      - At the end of the day, shipping is what counts.
+    pass:
+      - Shipping is what counts.
+
+- id: whether-youre
+  lang: en
+  kind: structural
+  category: opener-closer
+  weight: 5
+  severity: warn
+  message: "\"whether you're X or Y\""
+  docs: A formula for addressing everyone at once. Write to one reader.
+  match:
+    type: regex
+    pattern: "whether you(?:'re| are)\\b[^.!?]{1,60}?\\bor\\b"
+  examples:
+    flag:
+      - Whether you're a solo developer or a large team, it fits.
+    pass:
+      - It works for teams of up to 50 people.
+
+- id: imagine-opener
+  lang: en
+  kind: structural
+  category: opener-closer
+  weight: 4
+  severity: warn
+  message: "\"Imagine…\" opener"
+  docs: Asking the reader to imagine a scenario is a generated-essay habit. Show the real thing.
+  match:
+    type: regex
+    pattern: "(?:^|[.!?]\\s+)imagine\\b"
+  examples:
+    flag:
+      - Imagine a world where builds never break.
+    pass:
+      - Builds have not broken in 90 days.
+
+- id: heres-the-thing
+  lang: en
+  kind: structural
+  category: opener-closer
+  weight: 3
+  severity: warn
+  message: "\"here's the thing\""
+  docs: Conversational filler. Say the thing.
+  match:
+    type: phrases
+    phrases: ["here's the thing", "heres the thing", "here's the kicker", "but here's the best part"]
+  examples:
+    flag:
+      - Here's the thing, most linters are slow.
+    pass:
+      - Most linters take 30 seconds on this repo.

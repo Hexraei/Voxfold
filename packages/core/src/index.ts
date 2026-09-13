@@ -22,7 +22,57 @@ export {
   type PlaceholderOptions,
   type TextOptions,
 } from './block-builder.ts'
+export { applyFixes, type Flag, type LintOptions, type LintResult, lint } from './engine.ts'
 export { type Bias, type MappedRange, OffsetMap } from './offset-map.ts'
+export { DETECTORS, type Detector, type DetectorContext, getDetector } from './rules/detectors.ts'
+export {
+  type DirectiveState,
+  isDisabled,
+  isSuppressed,
+  parseDirectiveComment,
+  resolveDirectives,
+  type SuppressionEntry,
+  type SuppressionsFile,
+} from './rules/directives.ts'
+export {
+  applyEdits,
+  type FixResult,
+  type FlatEdit,
+  planFix,
+  type SuggestionResult,
+} from './rules/fixes.ts'
+export {
+  createMatchContext,
+  dedupe,
+  type Match,
+  type MatchContext,
+  runMatcher,
+} from './rules/match.ts'
+export type {
+  CleanupOp,
+  DensityScope,
+  DensitySpec,
+  Fix,
+  Matcher,
+  Rule,
+  RuleCategory,
+  RuleKind,
+  RuleOverride,
+  RuleOverrides,
+  RuleSet,
+  Severity,
+  Suggestion,
+  TokenPatternStep,
+} from './rules/schema.ts'
+export {
+  type Calibration,
+  combineScores,
+  computeScore,
+  type Grade,
+  gradeFor,
+  PLACEHOLDER_CALIBRATION,
+  type Score,
+} from './score.ts'
 export { equalsNormalized, normalizeForMatch } from './text/normalize.ts'
 export { type Sentence, splitSentences } from './text/sentences.ts'
 export {

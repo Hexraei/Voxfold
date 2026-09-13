@@ -1,0 +1,177 @@
+# Word swaps with exactly one correct result, so `--fix` can apply them unattended.
+# Anything with a judgement call in it belongs in `suggest`, not `fix`.
+
+- id: utilize
+  lang: en
+  kind: mechanical
+  category: plain-words
+  weight: 3
+  severity: warn
+  message: "\"utilize\" instead of \"use\""
+  docs: Use "use". It is shorter and means the same thing.
+  match:
+    type: words
+    words: [utilize, utilizes, utilized, utilizing, utilise, utilises, utilised, utilising]
+  fix:
+    type: replace
+    map:
+      utilize: use
+      utilizes: uses
+      utilized: used
+      utilizing: using
+      utilise: use
+      utilises: uses
+      utilised: used
+      utilising: using
+  examples:
+    flag:
+      - We utilize modern tooling.
+      - The team utilized every option.
+    pass:
+      - We use modern tooling.
+
+- id: leverage-verb
+  lang: en
+  kind: mechanical
+  category: plain-words
+  weight: 3
+  severity: warn
+  message: "\"leverage\" as a verb"
+  docs: Use "use". Keep "leverage" for the financial noun.
+  match:
+    type: words
+    tag: VERB
+    words: [leverage, leverages, leveraged, leveraging]
+  fix:
+    type: replace
+    map:
+      leverage: use
+      leverages: uses
+      leveraged: used
+      leveraging: using
+  examples:
+    flag:
+      - We leverage caching to stay fast.
+    pass:
+      - The fund reduced its leverage.
+
+- id: in-order-to
+  lang: en
+  kind: mechanical
+  category: plain-words
+  weight: 2
+  severity: warn
+  message: "\"in order to\""
+  docs: "\"to\" says the same thing."
+  match:
+    type: phrases
+    phrases: ["in order to"]
+  fix:
+    type: replace
+    map:
+      "*": to
+  examples:
+    flag:
+      - Restart the server in order to apply changes.
+    pass:
+      - Restart the server to apply changes.
+
+- id: plethora
+  lang: en
+  kind: mechanical
+  category: plain-words
+  weight: 3
+  severity: warn
+  message: "\"a plethora of\""
+  docs: Use "many", or give the number.
+  match:
+    type: phrases
+    phrases: ["a plethora of"]
+  fix:
+    type: replace
+    map:
+      "*": many
+  examples:
+    flag:
+      - It offers a plethora of options.
+    pass:
+      - It offers many options.
+
+- id: myriad-of
+  lang: en
+  kind: mechanical
+  category: plain-words
+  weight: 2
+  severity: warn
+  message: "\"a myriad of\""
+  docs: Use "many", or give the number.
+  match:
+    type: phrases
+    phrases: ["a myriad of"]
+  fix:
+    type: replace
+    map:
+      "*": many
+  examples:
+    flag:
+      - A myriad of integrations ship today.
+    pass:
+      - Many integrations ship today.
+
+- id: commence
+  lang: en
+  kind: mechanical
+  category: plain-words
+  weight: 2
+  severity: warn
+  message: "\"commence\" instead of \"start\""
+  docs: Use "start" or "begin".
+  match:
+    type: words
+    words: [commence, commences, commenced, commencing]
+  fix:
+    type: replace
+    map:
+      commence: start
+      commences: starts
+      commenced: started
+      commencing: starting
+  examples:
+    flag:
+      - The migration will commence tonight.
+    pass:
+      - The migration starts tonight.
+
+- id: facilitate
+  lang: en
+  kind: structural
+  category: plain-words
+  weight: 2
+  severity: warn
+  message: "\"facilitate\""
+  docs: "Say what actually happens: help, run, host, or simply do."
+  match:
+    type: words
+    words: [facilitate, facilitates, facilitated, facilitating]
+  examples:
+    flag:
+      - The platform facilitates collaboration.
+    pass:
+      - The platform lets two people edit at once.
+
+- id: endeavor
+  lang: en
+  kind: structural
+  category: plain-words
+  weight: 2
+  severity: warn
+  message: "\"endeavor\""
+  docs: Use "try", or name the work.
+  match:
+    type: words
+    words: [endeavor, endeavors, endeavour, endeavours, endeavoring, endeavouring]
+  examples:
+    flag:
+      - We endeavor to respond within a day.
+    pass:
+      - We reply within a day.
