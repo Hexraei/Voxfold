@@ -8,6 +8,8 @@
     "resolveJsonModule": true,
     "verbatimModuleSyntax": true,
     "isolatedModules": true,
+    // Source imports carry explicit .ts extensions; tsdown bundles and tsc only typechecks.
+    "allowImportingTsExtensions": true,
     "strict": true,
     "noUncheckedIndexedAccess": true,
     "noImplicitOverride": true,

@@ -21,5 +21,8 @@
   "scripts": {
     "build": "tsdown",
     "typecheck": "tsc -p tsconfig.json"
+  },
+  "dependencies": {
+    "compromise": "14.17.0"
   }
 }

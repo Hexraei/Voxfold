@@ -194,7 +194,11 @@ importers:
         specifier: 5.0.0
         version: 5.0.0(@types/node@24.13.4)(@vitest/coverage-v8@5.0.0)(vite@8.3.0(@types/node@24.13.4)(yaml@2.9.1))
 
-  packages/core: {}
+  packages/core:
+    dependencies:
+      compromise:
+        specifier: 14.17.0
+        version: 14.17.0
 
 packages:
 
@@ -819,6 +823,10 @@ packages:
     resolution: {integrity: sha512-NUPRluOfOiTKBKvWPtSD4PhFvWCqOi0BGStNWs57X9js7XGTprSmFoz5F0tWhR4WPjNeR9jXqdC7/UpSJTnlRg==}
     engines: {node: '>=18'}
 
+  compromise@14.17.0:
+    resolution: {integrity: sha512-zw9iEcts/8tMDASNopMQEs3Pclkx2Xk7XCltAb/oV1LEZcCQpDaalAtFmvuxYo+wnVDsW3H3oT16mw9qVHpkqA==}
+    engines: {node: '>=12.0.0'}
+
   defu@6.1.7:
     resolution: {integrity: sha512-7z22QmUWiQ/2d0KkdYmANbRUVABpZ9SNYyH5vx6PZ+nE5bcC0l7uFvEfHlyld/HcGBFTL536ClDt3DEcSlEJAQ==}
 
@@ -834,6 +842,10 @@ packages:
     peerDependenciesMeta:
       oxc-resolver:
         optional: true
+
+  efrt@2.7.0:
+    resolution: {integrity: sha512-/RInbCy1d4P6Zdfa+TMVsf/ufZVotat5hCw3QXmWtjU+3pFEOvOQ7ibo3aIxyCJw2leIeAMjmPj+1SLJiCpdrQ==}
+    engines: {node: '>=12.0.0'}
 
   empathic@2.0.1:
     resolution: {integrity: sha512-YGRs8knHhKHVShLkFET/rWAU8kmHbOV5LwN938RHI0pljAJ1Gf6SzXsSmRaEzcXTtOOmVqJ5+WtQPL5uigY50Q==}
@@ -879,6 +891,10 @@ packages:
   get-tsconfig@5.0.0-beta.6:
     resolution: {integrity: sha512-X6fBC0pmImC70gvX2zm56go9hx0MyoGVdG0tUCkg/D+Xnh5TJsOZ7iDbOdI3PvmtrDxnu1YdDufpK2QJX1Meqw==}
     engines: {node: '>=20.20.0'}
+
+  grad-school@0.0.5:
+    resolution: {integrity: sha512-rXunEHF9M9EkMydTBux7+IryYXEZinRk6g8OBOGDBzo/qWJjhTxy86i5q7lQYpCLHN8Sqv1XX3OIOc7ka2gtvQ==}
+    engines: {node: '>=8.0.0'}
 
   hookable@6.1.1:
     resolution: {integrity: sha512-U9LYDy1CwhMCnprUfeAZWZGByVbhd54hwepegYTK7Pi5NvqEj63ifz5z+xukznehT7i6NIZRu89Ay1AZmRsLEQ==}
@@ -1066,6 +1082,9 @@ packages:
 
   std-env@4.2.0:
     resolution: {integrity: sha512-oCUKSupKTHX53EyjDtuZQ64pjLJ6yYCtpmEw0goYxtjG9KpbRe8KAsl2tBUGU9DyMcJ0RwJ8GqJAFzMXcXW1Rw==}
+
+  suffix-thumb@5.0.3:
+    resolution: {integrity: sha512-d77avV91FwJkDA0juRQ19XjE1lE1cNCVIWS0ZRicXqdMN28yjO5LltzEkZBNAWS7qHpn37c1fU4PkIJ/rjJQEA==}
 
   tinybench@6.1.4:
     resolution: {integrity: sha512-9APumHG7r4yOk4X4WlkmE71aZcv1gvin1czO3OQ1U9iJcFA5Ja/ygyb0vPOVHTthFozUYs8CLoLUlM8grb2lTQ==}
@@ -1700,11 +1719,19 @@ snapshots:
 
   chai@6.2.2: {}
 
+  compromise@14.17.0:
+    dependencies:
+      efrt: 2.7.0
+      grad-school: 0.0.5
+      suffix-thumb: 5.0.3
+
   defu@6.1.7: {}
 
   detect-libc@2.1.2: {}
 
   dts-resolver@3.0.0: {}
+
+  efrt@2.7.0: {}
 
   empathic@2.0.1: {}
 
@@ -1740,6 +1767,8 @@ snapshots:
   get-tsconfig@5.0.0-beta.6:
     dependencies:
       resolve-pkg-maps: 1.0.0
+
+  grad-school@0.0.5: {}
 
   hookable@6.1.1: {}
 
@@ -1889,6 +1918,8 @@ snapshots:
   stackback@0.0.2: {}
 
   std-env@4.2.0: {}
+
+  suffix-thumb@5.0.3: {}
 
   tinybench@6.1.4: {}
 
