@@ -1,0 +1,8 @@
+node_modules/
+dist/
+coverage/
+.turbo/
+.voxfold/
+*.log
+.DS_Store
+corpus/.cache/

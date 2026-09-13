@@ -1,0 +1,4 @@
+* text=auto eol=lf
+# Fixtures are byte-exact: never normalize line endings.
+fixtures/** -text
+**/fixtures/** -text
