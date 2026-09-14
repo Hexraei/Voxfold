@@ -204,6 +204,133 @@ describe('engine: fixes and suggestions', () => {
   })
 })
 
+describe('engine: fix offsets are SOURCE offsets, not flat-block offsets', () => {
+  // Regression coverage for a real corruption bug: Flag.fix/.suggestions edits were computed in
+  // flat-block-text coordinates but applied directly to the document source. Every test above
+  // this point builds its document with a single block starting at source offset 0 — where flat
+  // offset and source offset are numerically identical by pure coincidence — so none of them
+  // could have caught it. These tests deliberately break that coincidence.
+
+  it('applies a fix correctly when the block does not start at source offset 0', () => {
+    const utilize = rule({
+      id: 'utilize',
+      kind: 'mechanical',
+      match: { type: 'words', words: ['utilize'] },
+      fix: { type: 'replace', map: { utilize: 'use' } },
+    })
+    // Front matter-like preamble pushes the block's source start well past 0, while the flag's
+    // match offset within the block's flat text starts near 0.
+    const preamble = '---\ntitle: Something\n---\n\n'
+    const sentence = 'We utilize modern tooling here.'
+    const text = preamble + sentence
+
+    const { block } = new BlockBuilder()
+      .addText(sentence, preamble.length, text.length)
+      .build({ id: 'b1', kind: 'paragraph' })
+    const document: ProseDocument = {
+      uri: 'test.md',
+      format: 'markdown',
+      source: text,
+      blocks: [block],
+      directives: [],
+    }
+
+    const result = lint(document, setOf(utilize))
+    const flag = result.flags[0]!
+    // The flat-text match is near offset 0, but the source fix must land at the real position.
+    expect(flag.fix![0]!.start).toBe(preamble.length + 'We '.length)
+    expect(applyFixes(text, result.flags)).toBe(`${preamble}We use modern tooling here.`)
+  })
+
+  it('applies fixes correctly across multiple blocks at different source offsets', () => {
+    const utilize = rule({
+      id: 'utilize',
+      kind: 'mechanical',
+      match: { type: 'words', words: ['utilize'] },
+      fix: { type: 'replace', map: { utilize: 'use' } },
+    })
+    const text = 'First we utilize caching.\n\nThen we utilize batching.'
+    const firstSentence = 'First we utilize caching.'
+    const secondSentence = 'Then we utilize batching.'
+    const secondStart = text.indexOf(secondSentence)
+
+    const first = new BlockBuilder()
+      .addText(firstSentence, 0, firstSentence.length)
+      .build({ id: 'b1', kind: 'paragraph' }).block
+    const second = new BlockBuilder()
+      .addText(secondSentence, secondStart, secondStart + secondSentence.length)
+      .build({ id: 'b2', kind: 'paragraph' }).block
+
+    const document: ProseDocument = {
+      uri: 'test.md',
+      format: 'markdown',
+      source: text,
+      blocks: [first, second],
+      directives: [],
+    }
+
+    const result = lint(document, setOf(utilize))
+    expect(result.flags).toHaveLength(2)
+    expect(applyFixes(text, result.flags)).toBe('First we use caching.\n\nThen we use batching.')
+  })
+
+  it('refuses a fix that would span a locked or non-contiguous segment, rather than mis-locating it', () => {
+    // "utilize {x}" where the word after utilize is a placeholder: a rule matching "utilize ."
+    // via regex would span the placeholder. That must never translate to a source edit.
+    const wideMatch = rule({
+      id: 'wide',
+      kind: 'mechanical',
+      match: { type: 'regex', pattern: 'utilize .' },
+      fix: { type: 'replace', map: { '*': 'use it' } },
+    })
+    const { block } = new BlockBuilder()
+      .addText('utilize ', 0, 8)
+      .addPlaceholder(8, 20, { lockReason: 'variable' })
+      .build({ id: 'b1', kind: 'paragraph' })
+    const document: ProseDocument = {
+      uri: 'x.tsx',
+      format: 'jsx',
+      source: 'utilize {value}',
+      blocks: [block],
+      directives: [],
+    }
+    const result = lint(document, setOf(wideMatch))
+    expect(result.flags[0]!.fix).toBeUndefined()
+  })
+
+  it('produces a byte-identical result to hand-applying the same edit to the real source', () => {
+    // The exact shape of the bug that was found: a markdown file with running prose before the
+    // flagged sentence, linted through the real BlockBuilder/OffsetMap, fixed, and diffed against
+    // manual find-and-replace on the ORIGINAL file text.
+    const utilize = rule({
+      id: 'utilize',
+      kind: 'mechanical',
+      match: { type: 'words', words: ['utilize'] },
+      fix: { type: 'replace', map: { utilize: 'use' } },
+    })
+    const text =
+      '# Title\n\nSome unrelated leading prose that has nothing to do with the flag below.\n\n' +
+      'This paragraph does utilize a word that should be fixed.\n'
+    const target = 'This paragraph does utilize a word that should be fixed.'
+    const start = text.indexOf(target)
+
+    const { block } = new BlockBuilder()
+      .addText(target, start, start + target.length)
+      .build({ id: 'b1', kind: 'paragraph' })
+    const document: ProseDocument = {
+      uri: 'test.md',
+      format: 'markdown',
+      source: text,
+      blocks: [block],
+      directives: [],
+    }
+
+    const result = lint(document, setOf(utilize))
+    const expected = text.replace('utilize', 'use')
+    expect(applyFixes(text, result.flags)).toBe(expected)
+  })
+})
+
 describe('engine: directives and suppressions', () => {
   const buzz = rule({ id: 'buzz', match: { type: 'words', words: ['buzzword'] } })
 

@@ -65,6 +65,12 @@ export type {
   TokenPatternStep,
 } from './rules/schema.ts'
 export {
+  type SourceEdit,
+  toSourceEdit,
+  translateEdits,
+  translateFixStrict,
+} from './rules/source-edits.ts'
+export {
   type Calibration,
   combineScores,
   computeScore,

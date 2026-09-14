@@ -15,7 +15,7 @@ import {
   isSuppressed,
   resolveDirectives,
 } from './rules/directives.ts'
-import { applyEdits, type FlatEdit, planFix, type SuggestionResult } from './rules/fixes.ts'
+import { applyEdits, planFix } from './rules/fixes.ts'
 import {
   createMatchContext,
   dedupe,
@@ -24,6 +24,7 @@ import {
   runMatcher,
 } from './rules/match.ts'
 import type { DensitySpec, Rule, RuleOverrides, RuleSet, Severity } from './rules/schema.ts'
+import { type SourceEdit, translateFixStrict } from './rules/source-edits.ts'
 import { type Calibration, computeScore, PLACEHOLDER_CALIBRATION, type Score } from './score.ts'
 import { type Sentence, splitSentences } from './text/sentences.ts'
 import { defaultTagger, type Tagger } from './text/tagger.ts'
@@ -50,8 +51,15 @@ export interface Flag {
   dense: boolean
   /** Whether every source range behind this flag can be edited in place. */
   editable: boolean
-  fix?: FlatEdit[]
-  suggestions?: SuggestionResult[]
+  /**
+   * A single correct fix, already translated to SOURCE-file offsets (never flat-block offsets).
+   * Absent when the rule has no fix, or when the fix could not be expressed as a clean source
+   * edit (e.g. it would touch a locked segment) — in that case it is offered as a suggestion
+   * instead, never partially applied.
+   */
+  fix?: SourceEdit[]
+  /** Choices a human picks between, each already translated to source-file offsets. */
+  suggestions?: Array<{ label: string; edits: SourceEdit[] }>
   /** Stable identity for suppressions: rule id + normalized surrounding sentence. */
   hash: string
   suppressed?: 'inline' | 'file'
@@ -250,7 +258,22 @@ export function lint(
 
     if (suppressed && !options.includeSuppressed) continue
 
-    const { fix, suggestions } = planFix(rule, block.block.text, match)
+    const planned = planFix(rule, block.block.text, match)
+    // Translate from flat-block coordinates (where planFix computed them, since Match itself is
+    // in that space) to source-file coordinates. Both use translateFixStrict: a fix or
+    // suggestion is an atomic edit list, and applying only some of its edits (say, the
+    // replacement but not the recapitalize that must go with it) would corrupt the file just as
+    // surely as applying it at the wrong offset. Refused outright, never partially applied.
+    const fix = planned.fix ? translateFixStrict(map, planned.fix) : undefined
+    const suggestions = planned.suggestions
+      ?.map((suggestion) => {
+        const edits = translateFixStrict(map, suggestion.edits)
+        return edits ? { label: suggestion.label, edits } : undefined
+      })
+      .filter(
+        (suggestion): suggestion is { label: string; edits: SourceEdit[] } =>
+          suggestion !== undefined,
+      )
     const message = dense && spec ? `${rule.message} (${count} in this ${spec.per})` : rule.message
 
     const flag: Flag = {
@@ -300,7 +323,16 @@ export function lint(
   }
 }
 
-/** Apply every safe fix in a lint result to a block's flat text. Used by `--fix` and tests. */
+/**
+ * Apply every fix in a lint result to the document's SOURCE text (the same string passed to the
+ * adapter's `extract`, i.e. `document.source` / the raw file contents) — never to a block's flat
+ * text. `Flag.fix` is already translated to source-file offsets by `lint`, so this is a plain
+ * apply: no re-derivation of positions happens here, which is deliberate, since the offset
+ * translation is exactly the step that is easy to get wrong (see `rules/source-edits.ts`).
+ *
+ * Used by `--fix` and by tests; for a multi-file project, call this once per file with that
+ * file's own flags (a flag belongs to exactly one document via `blockId`/`document.uri`).
+ */
 export function applyFixes(text: string, flags: readonly Flag[]): string {
   const edits = flags.flatMap((flag) => flag.fix ?? [])
   // Longest match first at a given position: "in order to" should win over "order", since the
@@ -309,7 +341,7 @@ export function applyFixes(text: string, flags: readonly Flag[]): string {
 
   // Overlapping fixes are then dropped rather than merged: two rules rewriting the same span
   // cannot both be right, and guessing which wins is exactly the kind of silent damage to avoid.
-  const safe: FlatEdit[] = []
+  const safe: SourceEdit[] = []
   for (const edit of sorted) {
     const previous = safe[safe.length - 1]
     if (previous && edit.start < previous.end) continue

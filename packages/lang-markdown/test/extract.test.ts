@@ -1,4 +1,4 @@
-import { lint, mapOf, PLACEHOLDER_CHAR, type ProseDocument } from '@voxfold/core'
+import { applyFixes, lint, mapOf, PLACEHOLDER_CHAR, type ProseDocument } from '@voxfold/core'
 import { recommended } from '@voxfold/rules-recommended'
 import { describe, expect, it } from 'vitest'
 import { markdownAdapter } from '../src/index'
@@ -189,5 +189,42 @@ Rules live in a YAML file. Turn one off with a disable comment above the line, o
 
     expect(generatedScore!.value).toBeLessThan(40)
     expect(plainScore!.value).toBeGreaterThan(85)
+  })
+})
+
+describe('markdown adapter: --fix end to end', () => {
+  it('applies a mechanical fix at the correct source position when the flag is not at the start of the file', () => {
+    // This is the scenario a real corruption bug shipped in: leading content pushes the block's
+    // source offset away from 0, and the fix must still land in exactly the right place rather
+    // than at the flat-text offset within the block.
+    const text =
+      '# Title\n\nSome unrelated leading paragraph with plenty of its own words.\n\nWe utilize modern tooling in this sentence.\n'
+    const document = extract(text)
+    const result = lint(document, recommended)
+    const fixed = applyFixes(text, result.flags)
+    expect(fixed).toBe(text.replace('utilize', 'use'))
+  })
+
+  it('applies a mechanical fix correctly when the match spans inline formatting', () => {
+    const text =
+      'Some intro paragraph here with several words in it.\n\nWe **utilize** modern tooling for everything we build.'
+    const document = extract(text)
+    const result = lint(document, recommended)
+    const fixed = applyFixes(text, result.flags)
+    expect(fixed).toBe(text.replace('**utilize**', '**use**'))
+  })
+
+  it('applies fixes independently and correctly across several blocks', () => {
+    const text = [
+      'First paragraph, we utilize caching here for speed.',
+      '',
+      'Second paragraph, we utilize batching here for throughput.',
+      '',
+      'Third paragraph has no tells at all in it, just plain words.',
+    ].join('\n')
+    const document = extract(text)
+    const result = lint(document, recommended)
+    const fixed = applyFixes(text, result.flags)
+    expect(fixed).toBe(text.replaceAll('utilize', 'use'))
   })
 })

@@ -1,4 +1,4 @@
-import { lint, mapOf, PLACEHOLDER_CHAR, type ProseDocument } from '@voxfold/core'
+import { applyFixes, lint, mapOf, PLACEHOLDER_CHAR, type ProseDocument } from '@voxfold/core'
 import { recommended } from '@voxfold/rules-recommended'
 import { describe, expect, it } from 'vitest'
 import { htmlAdapter, isClientRenderedShell } from '../src/index'
@@ -181,5 +181,26 @@ describe('html adapter: a realistic landing page', () => {
     const plainScore = lint(extract(plain), recommended).score!
     expect(marketingScore.value).toBeLessThan(45)
     expect(plainScore.value).toBeGreaterThan(85)
+  })
+})
+
+describe('html adapter: --fix end to end', () => {
+  it('applies a mechanical fix at the correct position with leading markup before the flag', () => {
+    const html =
+      '<body><header><p>Unrelated header copy with several words in it.</p></header>' +
+      '<main><p>We utilize modern tooling in this sentence.</p></main></body>'
+    const document = extract(html)
+    const result = lint(document, recommended)
+    const fixed = applyFixes(html, result.flags)
+    expect(fixed).toBe(html.replace('utilize', 'use'))
+  })
+
+  it('applies a mechanical fix correctly when the match spans an inline tag', () => {
+    const html =
+      '<body><p>Some intro copy with several words in it.</p><p>We <b>utilize</b> modern tooling for everything.</p></body>'
+    const document = extract(html)
+    const result = lint(document, recommended)
+    const fixed = applyFixes(html, result.flags)
+    expect(fixed).toBe(html.replace('<b>utilize</b>', '<b>use</b>'))
   })
 })
