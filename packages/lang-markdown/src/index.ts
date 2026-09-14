@@ -28,6 +28,7 @@ import { mdxFromMarkdown } from 'mdast-util-mdx'
 import { frontmatter } from 'micromark-extension-frontmatter'
 import { gfm } from 'micromark-extension-gfm'
 import { mdxjs } from 'micromark-extension-mdxjs'
+import { markdownWriter } from './writer/index.ts'
 
 export interface MarkdownSettings {
   /** Treat the source as MDX (JSX blocks, expressions, ESM imports). */
@@ -306,6 +307,7 @@ export const markdownAdapter: LanguageAdapter = {
   id: 'markdown',
   extensions: ['.md', '.markdown', '.mdx'],
   extract,
+  writer: markdownWriter,
 }
 
 export default markdownAdapter

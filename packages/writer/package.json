@@ -1,0 +1,33 @@
+{
+  "name": "@voxfold/writer",
+  "version": "0.0.0",
+  "description": "Verify-then-write protocol for editing prose in place: git guard, hash check, minimal patch, re-parse verification, atomic write, undo history.",
+  "license": "MIT",
+  "type": "module",
+  "sideEffects": false,
+  "engines": {
+    "node": "^22.12.0 || >=24.0.0"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.mts",
+      "default": "./dist/index.mjs"
+    },
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsdown",
+    "typecheck": "tsc -p tsconfig.json"
+  },
+  "dependencies": {
+    "@voxfold/core": "workspace:*"
+  },
+  "devDependencies": {
+    "@voxfold/lang-html": "workspace:*",
+    "@voxfold/lang-markdown": "workspace:*",
+    "fast-check": "4.10.0"
+  }
+}

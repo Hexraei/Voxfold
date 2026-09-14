@@ -23,6 +23,7 @@ import {
 // parse5 only exports its root, so the tree-adapter types come from the namespace it re-exports
 // there rather than a deep path (which resolves at runtime but not for types).
 import { type DefaultTreeAdapterTypes, parse } from 'parse5'
+import { htmlWriter } from './writer/index.ts'
 
 type ChildNode = DefaultTreeAdapterTypes.ChildNode
 type Document = DefaultTreeAdapterTypes.Document
@@ -444,6 +445,7 @@ export const htmlAdapter: LanguageAdapter = {
   id: 'html',
   extensions: ['.html', '.htm'],
   extract,
+  writer: htmlWriter,
 }
 
 export default htmlAdapter
