@@ -27,6 +27,7 @@
   },
   "devDependencies": {
     "@voxfold/lang-html": "workspace:*",
+    "@voxfold/lang-jsx": "workspace:*",
     "@voxfold/lang-markdown": "workspace:*",
     "fast-check": "4.10.0"
   }

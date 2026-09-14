@@ -29,6 +29,7 @@
   "dependencies": {
     "@voxfold/core": "workspace:*",
     "@voxfold/lang-html": "workspace:*",
+    "@voxfold/lang-jsx": "workspace:*",
     "@voxfold/lang-markdown": "workspace:*",
     "@voxfold/rules-recommended": "workspace:*",
     "cac": "7.0.0",

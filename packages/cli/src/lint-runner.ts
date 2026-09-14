@@ -16,6 +16,7 @@ import {
   type SuppressionsFile,
 } from '@voxfold/core'
 import { htmlAdapter } from '@voxfold/lang-html'
+import { jsxAdapter } from '@voxfold/lang-jsx'
 import { markdownAdapter } from '@voxfold/lang-markdown'
 import type { SupportedFormat } from './discover.ts'
 
@@ -39,6 +40,7 @@ async function extractFile(
 ): Promise<ProseDocument> {
   const text = await readFile(file, 'utf8')
   if (format === 'html') return (await htmlAdapter.extract(text, { uri })) as ProseDocument
+  if (format === 'jsx') return (await jsxAdapter.extract(text, { uri })) as ProseDocument
   return (await markdownAdapter.extract(text, {
     uri,
     settings: { mdx: format === 'mdx' },
