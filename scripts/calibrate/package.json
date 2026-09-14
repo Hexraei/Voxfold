@@ -1,0 +1,14 @@
+{
+  "name": "@voxfold/scripts-calibrate",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "calibrate": "node run.js"
+  },
+  "dependencies": {
+    "@voxfold/core": "workspace:*",
+    "@voxfold/lang-markdown": "workspace:*",
+    "@voxfold/rules-recommended": "workspace:*"
+  }
+}

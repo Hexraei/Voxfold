@@ -1,2 +1,4 @@
 packages:
   - packages/*
+  - scripts/calibrate
+  - scripts/leaderboard

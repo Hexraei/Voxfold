@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest'
 import { BlockBuilder } from '../src/block-builder'
 import { applyFixes, lint } from '../src/engine'
 import type { Rule, RuleSet } from '../src/rules/schema'
-import { combineScores, computeScore, gradeFor, PLACEHOLDER_CALIBRATION } from '../src/score'
+import { combineScores, computeScore, DEFAULT_CALIBRATION, gradeFor } from '../src/score'
 import type { BlockKind, Directive, ProseDocument } from '../src/types'
 
 const rule = (overrides: Partial<Rule> & Pick<Rule, 'id' | 'match'>): Rule => ({
@@ -417,9 +417,9 @@ describe('scoring', () => {
   })
 
   it('maps grades at the documented cut-offs', () => {
-    expect(gradeFor(PLACEHOLDER_CALIBRATION.cutoffs.A)).toBe('A')
-    expect(gradeFor(PLACEHOLDER_CALIBRATION.cutoffs.B)).toBe('B')
-    expect(gradeFor(PLACEHOLDER_CALIBRATION.cutoffs.D - 1)).toBe('F')
+    expect(gradeFor(DEFAULT_CALIBRATION.cutoffs.A)).toBe('A')
+    expect(gradeFor(DEFAULT_CALIBRATION.cutoffs.B)).toBe('B')
+    expect(gradeFor(DEFAULT_CALIBRATION.cutoffs.D - 1)).toBe('F')
   })
 
   it('weights a multi-file score by words, so one short page cannot swing it', () => {

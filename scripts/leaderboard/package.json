@@ -1,0 +1,13 @@
+{
+  "name": "@voxfold/scripts-leaderboard",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "leaderboard": "node run.js"
+  },
+  "dependencies": {
+    "voxfold": "workspace:*",
+    "yaml": "^2.6.0"
+  }
+}

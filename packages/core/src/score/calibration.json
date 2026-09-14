@@ -1,0 +1,12 @@
+{
+  "tau": 10.5,
+  "cutoffs": {
+    "A": 90,
+    "B": 80,
+    "C": 70,
+    "D": 60
+  },
+  "minWords": 80,
+  "rulesetVersion": "1.0.0",
+  "fittedAt": "2026-09-14"
+}

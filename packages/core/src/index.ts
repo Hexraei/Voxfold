@@ -74,9 +74,9 @@ export {
   type Calibration,
   combineScores,
   computeScore,
+  DEFAULT_CALIBRATION,
   type Grade,
   gradeFor,
-  PLACEHOLDER_CALIBRATION,
   type Score,
 } from './score.ts'
 export { equalsNormalized, normalizeForMatch } from './text/normalize.ts'

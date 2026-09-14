@@ -25,7 +25,7 @@ import {
 } from './rules/match.ts'
 import type { DensitySpec, Rule, RuleOverrides, RuleSet, Severity } from './rules/schema.ts'
 import { type SourceEdit, translateFixStrict } from './rules/source-edits.ts'
-import { type Calibration, computeScore, PLACEHOLDER_CALIBRATION, type Score } from './score.ts'
+import { type Calibration, computeScore, DEFAULT_CALIBRATION, type Score } from './score.ts'
 import { type Sentence, splitSentences } from './text/sentences.ts'
 import { defaultTagger, type Tagger } from './text/tagger.ts'
 import { countWords, tokenize } from './text/tokenize.ts'
@@ -193,7 +193,7 @@ export function lint(
   options: LintOptions = {},
 ): LintResult {
   const tagger = options.tagger ?? defaultTagger
-  const calibration = options.calibration ?? PLACEHOLDER_CALIBRATION
+  const calibration = options.calibration ?? DEFAULT_CALIBRATION
   const rulesetId = `${ruleset.name}@${ruleset.version}+${tagger.id}`
 
   const prepared = prepare(document, tagger)

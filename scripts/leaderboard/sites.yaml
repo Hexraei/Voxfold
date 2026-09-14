@@ -1,0 +1,15 @@
+# Sites for the reproducible leaderboard run.
+#
+# Each entry is a single page linted with `voxfold <url> --format json`. Full-site crawling
+# (`--crawl`) is planned in the CLI but not yet implemented (see packages/cli/src/cli.ts) — until
+# it lands, `pages` beyond the first for a site are ignored and a note is printed. Add real sites
+# here once network access and `--crawl` are both available; this file intentionally ships empty
+# beyond the example below, since committing scores for third-party sites without checking them
+# by hand first would be worse than an empty leaderboard.
+
+sites: []
+
+# Example shape once populated:
+# sites:
+#   - name: Example docs
+#     url: https://example.com/docs
