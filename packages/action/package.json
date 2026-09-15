@@ -1,0 +1,32 @@
+{
+  "name": "@voxfold/action",
+  "version": "0.0.0",
+  "description": "GitHub Action: lint a PR, post a sticky score comment, annotate changed lines.",
+  "license": "MIT",
+  "private": true,
+  "type": "module",
+  "sideEffects": false,
+  "engines": {
+    "node": "^22.12.0 || >=24.0.0"
+  },
+  "scripts": {
+    "build": "tsdown",
+    "typecheck": "tsc -p tsconfig.json"
+  },
+  "dependencies": {
+    "@actions/core": "3.0.1",
+    "@actions/exec": "3.0.0",
+    "@actions/github": "9.1.1",
+    "@voxfold/core": "workspace:*",
+    "@voxfold/lang-html": "workspace:*",
+    "@voxfold/lang-jsx": "workspace:*",
+    "@voxfold/lang-markdown": "workspace:*",
+    "@voxfold/lang-vue": "workspace:*",
+    "@voxfold/rules-recommended": "workspace:*",
+    "fast-glob": "3.3.3",
+    "micromatch": "4.0.8"
+  },
+  "devDependencies": {
+    "@types/micromatch": "4.0.10"
+  }
+}

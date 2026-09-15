@@ -1,0 +1,56 @@
+name: Voxfold
+description: Lint a PR for AI-copy style tells, post a sticky score comment, and annotate changed lines.
+author: Voxfold
+branding:
+  icon: edit-3
+  color: purple
+
+inputs:
+  paths:
+    description: Glob(s) to lint, one per line or comma-separated. Defaults to the whole checkout.
+    required: false
+    default: .
+  min-score:
+    description: Fail the check if the project score falls below this value.
+    required: false
+  min-file-score:
+    description: Fail the check if any single file's score falls below this value.
+    required: false
+  comment:
+    description: Post/update a sticky PR comment with the score report.
+    required: false
+    default: 'true'
+  annotations:
+    description: Emit ::warning/::error annotations for flags on changed lines.
+    required: false
+    default: 'true'
+  badge:
+    description: >
+      On a push to the default branch, compute a shields.io endpoint badge JSON and expose it
+      as the `badge-json` output. This action never pushes it anywhere itself — a separate
+      workflow step is responsible for writing that output to wherever the badge is served
+      from (e.g. committing it to an orphan branch).
+    required: false
+    default: 'false'
+  github-token:
+    description: Token used to read and post PR comments. Typically ${{ github.token }}.
+    required: false
+    default: ${{ github.token }}
+
+outputs:
+  score:
+    description: Overall project score (0-100), or empty if not enough text to score.
+  grade:
+    description: Letter grade (A-F) for the overall score.
+  new-flags:
+    description: Count of flags present on head but not on the PR's base.
+  fixed-flags:
+    description: Count of flags present on the PR's base but not on head.
+  passed:
+    description: Whether the gate passed ("true"/"false").
+  badge-json:
+    description: Badge JSON payload, only set when `badge` is true and this run is a default-branch push.
+
+runs:
+  using: node24
+  main: packages/action/dist/index.mjs
