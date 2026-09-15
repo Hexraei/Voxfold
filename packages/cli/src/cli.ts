@@ -16,6 +16,7 @@ import { discoverFiles, findGitRoot, formatForPath } from './discover.ts'
 import { EXIT_FATAL, EXIT_GATE_FAILED, EXIT_OK } from './exit-codes.ts'
 import { FetchError, fetchAndExtract, SPA_SHELL_MESSAGE } from './fetch-url.ts'
 import { FORMATTER_NAMES, format, isFormatterName } from './format/index.ts'
+import { runInit } from './init.ts'
 import { allFlags, fixFile, lintFile, summarize } from './lint-runner.ts'
 import {
   addSuppressions,
@@ -116,12 +117,44 @@ export async function run(argv: string[]): Promise<number> {
       process.exitCode = await lintCommand(patterns, flags)
     })
 
+  cli
+    .command('init', 'Detect your framework and write a starter voxfold.config.ts')
+    .action(async () => {
+      process.exitCode = await initCommand()
+    })
+
   cli.help()
   cli.version(VERSION)
 
   cli.parse(argv, { run: false })
   await cli.runMatchedCommand()
   return Number(process.exitCode ?? EXIT_OK)
+}
+
+async function initCommand(): Promise<number> {
+  const cwd = process.cwd()
+  const result = await runInit(cwd)
+
+  if (result.configWritten) {
+    process.stdout.write(`${pc.green('created')} voxfold.config.ts\n`)
+  } else {
+    process.stdout.write(`${pc.yellow('skipped')} voxfold.config.ts (already exists)\n`)
+  }
+
+  if (result.framework === 'unknown') {
+    process.stdout.write(
+      '\nNo Vite, Astro or Next.js dependency detected — the CLI still works standalone ' +
+        '(`voxfold <path>`), but there is no live-edit overlay to wire in.\n',
+    )
+    return EXIT_OK
+  }
+
+  process.stdout.write(
+    `\nDetected ${pc.bold(result.framework)}. For the live-edit dev overlay, install ` +
+      `${pc.bold(result.integrationPackage ?? '')} and add it to your config:\n\n` +
+      `${result.integrationSnippet}\n\n`,
+  )
+  return EXIT_OK
 }
 
 async function lintCommand(patterns: string[], flags: CliFlags): Promise<number> {
