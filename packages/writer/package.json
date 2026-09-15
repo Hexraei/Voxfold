@@ -26,6 +26,7 @@
     "@voxfold/core": "workspace:*"
   },
   "devDependencies": {
+    "@voxfold/lang-astro": "workspace:*",
     "@voxfold/lang-html": "workspace:*",
     "@voxfold/lang-jsx": "workspace:*",
     "@voxfold/lang-markdown": "workspace:*",

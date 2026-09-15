@@ -3,3 +3,5 @@ packages:
   - scripts/calibrate
   - scripts/leaderboard
   - examples/*
+allowBuilds:
+  esbuild: true

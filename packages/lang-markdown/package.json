@@ -13,6 +13,14 @@
       "types": "./dist/index.d.mts",
       "default": "./dist/index.mjs"
     },
+    "./stamp": {
+      "types": "./dist/stamp.d.mts",
+      "default": "./dist/stamp.mjs"
+    },
+    "./vitepress": {
+      "types": "./dist/vitepress.d.mts",
+      "default": "./dist/vitepress.mjs"
+    },
     "./package.json": "./package.json"
   },
   "files": [
@@ -31,10 +39,27 @@
     "micromark-extension-frontmatter": "2.0.0",
     "micromark-extension-gfm": "3.0.0",
     "micromark-extension-mdxjs": "3.0.0",
+    "unist-util-visit": "5.1.0",
     "unist-util-visit-parents": "6.0.1"
   },
   "devDependencies": {
+    "@types/hast": "3.0.5",
+    "@types/markdown-it": "14.2.0",
     "@types/mdast": "4.0.4",
-    "@voxfold/rules-recommended": "workspace:*"
+    "@voxfold/rules-recommended": "workspace:*",
+    "markdown-it": "15.0.2",
+    "rehype-stringify": "10.0.1",
+    "remark-gfm": "4.0.1",
+    "remark-parse": "11.0.0",
+    "remark-rehype": "11.1.2",
+    "unified": "11.0.5"
+  },
+  "peerDependencies": {
+    "markdown-it": "^14.0.0 || ^15.0.0"
+  },
+  "peerDependenciesMeta": {
+    "markdown-it": {
+      "optional": true
+    }
   }
 }

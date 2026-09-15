@@ -18,6 +18,7 @@
     "@actions/exec": "3.0.0",
     "@actions/github": "9.1.1",
     "@voxfold/core": "workspace:*",
+    "@voxfold/lang-astro": "workspace:*",
     "@voxfold/lang-html": "workspace:*",
     "@voxfold/lang-jsx": "workspace:*",
     "@voxfold/lang-markdown": "workspace:*",

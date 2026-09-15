@@ -1,0 +1,44 @@
+{
+  "name": "@voxfold/astro",
+  "version": "0.0.0",
+  "description": "Astro integration: stamps .astro/.md/.mdx in dev, serves the edit-server over /__voxfold/*, and injects the browser overlay.",
+  "license": "MIT",
+  "type": "module",
+  "sideEffects": false,
+  "engines": {
+    "node": "^22.12.0 || >=24.0.0"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.mts",
+      "default": "./dist/index.mjs"
+    },
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist",
+    "src/client.ts"
+  ],
+  "scripts": {
+    "build": "tsdown",
+    "typecheck": "tsc -p tsconfig.json"
+  },
+  "peerDependencies": {
+    "astro": "^7.0.0"
+  },
+  "dependencies": {
+    "@voxfold/core": "workspace:*",
+    "@voxfold/edit-server": "workspace:*",
+    "@voxfold/lang-astro": "workspace:*",
+    "@voxfold/lang-markdown": "workspace:*",
+    "@voxfold/overlay": "workspace:*",
+    "@voxfold/rules-recommended": "workspace:*",
+    "preact": "10.29.8",
+    "vfile": "6.0.3"
+  },
+  "devDependencies": {
+    "@types/hast": "3.0.5",
+    "astro": "7.3.2",
+    "vite": "8.3.0"
+  }
+}

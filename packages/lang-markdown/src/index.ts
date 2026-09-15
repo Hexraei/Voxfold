@@ -190,7 +190,7 @@ function buildBlock(
  * Markdown escapes mean the raw slice is longer than the value: `\*` is two source characters
  * for one real one. Walking both in step keeps every later offset correct.
  */
-function mapEscapes(raw: string, value: string, start: number): Int32Array {
+export function mapEscapes(raw: string, value: string, start: number): Int32Array {
   const charMap = new Int32Array(value.length)
   let rawIndex = 0
   for (let i = 0; i < value.length; i++) {

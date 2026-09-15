@@ -12,6 +12,7 @@ import {
   type ProseDocument,
   type RuleSet,
 } from '@voxfold/core'
+import { astroAdapter } from '@voxfold/lang-astro'
 import { htmlAdapter } from '@voxfold/lang-html'
 import { jsxAdapter } from '@voxfold/lang-jsx'
 import { markdownAdapter } from '@voxfold/lang-markdown'
@@ -31,6 +32,7 @@ async function extract(text: string, format: SupportedFormat, uri: string): Prom
   if (format === 'jsx') return (await jsxAdapter.extract(text, { uri })) as ProseDocument
   if (format === 'vue') return (await vueAdapter.extract(text, { uri })) as ProseDocument
   if (format === 'svelte') return (await svelteAdapter.extract(text, { uri })) as ProseDocument
+  if (format === 'astro') return (await astroAdapter.extract(text, { uri })) as ProseDocument
   return (await markdownAdapter.extract(text, {
     uri,
     settings: { mdx: format === 'mdx' },

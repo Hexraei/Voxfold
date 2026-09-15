@@ -1,6 +1,6 @@
 /** Extension -> format mapping, matching the CLI's `discover.ts` supported set. */
 
-export type SupportedFormat = 'markdown' | 'mdx' | 'html' | 'jsx' | 'vue' | 'svelte'
+export type SupportedFormat = 'markdown' | 'mdx' | 'html' | 'jsx' | 'vue' | 'svelte' | 'astro'
 
 const EXTENSION_FORMAT: Record<string, SupportedFormat> = {
   '.md': 'markdown',
@@ -12,6 +12,7 @@ const EXTENSION_FORMAT: Record<string, SupportedFormat> = {
   '.tsx': 'jsx',
   '.vue': 'vue',
   '.svelte': 'svelte',
+  '.astro': 'astro',
 }
 
 export function formatForPath(path: string): SupportedFormat | undefined {
