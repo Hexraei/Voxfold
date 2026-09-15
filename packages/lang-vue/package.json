@@ -1,0 +1,34 @@
+{
+  "name": "@voxfold/lang-vue",
+  "version": "0.0.0",
+  "description": "Vue SFC adapter for Voxfold: walks @vue/compiler-sfc's template AST and flattens prose.",
+  "license": "MIT",
+  "type": "module",
+  "sideEffects": false,
+  "engines": {
+    "node": "^22.12.0 || >=24.0.0"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.mts",
+      "default": "./dist/index.mjs"
+    },
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsdown",
+    "typecheck": "tsc -p tsconfig.json"
+  },
+  "dependencies": {
+    "@vue/compiler-core": "3.5.42",
+    "@vue/compiler-sfc": "3.5.42",
+    "@voxfold/core": "workspace:*",
+    "magic-string": "1.3.1"
+  },
+  "devDependencies": {
+    "@voxfold/rules-recommended": "workspace:*"
+  }
+}

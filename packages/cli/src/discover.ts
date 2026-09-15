@@ -11,7 +11,7 @@ import { dirname, join, relative, resolve } from 'node:path'
 import fg from 'fast-glob'
 import ignore, { type Ignore } from 'ignore'
 
-export type SupportedFormat = 'markdown' | 'mdx' | 'html' | 'jsx'
+export type SupportedFormat = 'markdown' | 'mdx' | 'html' | 'jsx' | 'vue'
 
 const EXTENSION_FORMAT: Record<string, SupportedFormat> = {
   '.md': 'markdown',
@@ -21,6 +21,7 @@ const EXTENSION_FORMAT: Record<string, SupportedFormat> = {
   '.htm': 'html',
   '.jsx': 'jsx',
   '.tsx': 'jsx',
+  '.vue': 'vue',
 }
 
 export function formatForPath(path: string): SupportedFormat | undefined {
@@ -68,7 +69,7 @@ export async function discoverFiles(options: DiscoverOptions): Promise<string[]>
     if (existsSync(literalPath)) {
       const stat = statSync(literalPath)
       if (stat.isDirectory()) {
-        const entries = await fg('**/*.{md,markdown,mdx,html,htm,jsx,tsx}', {
+        const entries = await fg('**/*.{md,markdown,mdx,html,htm,jsx,tsx,vue}', {
           cwd: literalPath,
           absolute: true,
           dot: false,
