@@ -41,6 +41,7 @@ import { structuralPathTo, visitNodes } from './ast-path.ts'
 import { decodeStringLiteral } from './js-string-literal.ts'
 import { jsxTextOffsets } from './jsx-entities.ts'
 import { cleanJsxTextWithOffsets } from './jsx-whitespace.ts'
+import { stamp } from './stamp.ts'
 import { jsxWriter } from './writer/index.ts'
 
 export interface JsxSettings {
@@ -134,9 +135,8 @@ function lockReasonFor(expression: Expression | { type: 'JSXEmptyExpression' }):
   }
 }
 
-interface WalkState {
+export interface WalkState {
   source: string
-  blocks: Block[]
   counter: number
   uri: string
   settings: JsxSettings
@@ -286,20 +286,20 @@ export function parseJsx(text: string): File {
   })
 }
 
-function extract(text: string, context: ExtractContext): ProseDocument {
-  const settings = (context.settings ?? {}) as JsxSettings
-  const ast = parseJsx(text)
-  const root = ast.program as unknown as BabelNode
+export interface CollectedBlock {
+  element: JSXElement
+  /** Structural path of `element` itself — stable across unrelated edits, unlike a counter. */
+  elementPath: string
+  block: Block
+}
 
-  const state: WalkState = {
-    source: text,
-    blocks: [],
-    counter: 0,
-    uri: context.uri,
-    settings,
-    root,
-  }
-
+/**
+ * Every host element that anchors a prose block, paired with the `Block` it produced. Shared by
+ * `extract()` (which only needs the blocks) and `stamp()` (which needs the element too, to know
+ * where in the source to inject `data-vf`) so the two never disagree about what counts as a block.
+ */
+export function collectBlocks(root: BabelNode, state: WalkState): CollectedBlock[] {
+  const collected: CollectedBlock[] = []
   visitNodes(root, (node) => {
     if (node.type !== 'JSXElement') return
     const name = tagNameOf(node)
@@ -308,15 +308,32 @@ function extract(text: string, context: ExtractContext): ProseDocument {
     if (!kind || !isHostElement(name)) return
     // A block element's children are flattened into it here; `visitNodes` still descends into
     // them afterward, since a <li> may contain its own separate <p> block.
-    const block = buildBlock(node, `${context.uri}#${state.counter++}`, kind, state)
-    if (block) state.blocks.push(block)
+    const block = buildBlock(node, `${state.uri}#${state.counter++}`, kind, state)
+    if (block) {
+      collected.push({
+        element: node,
+        elementPath: structuralPathTo(state.root, node) ?? '',
+        block,
+      })
+    }
   })
+  return collected
+}
+
+function extract(text: string, context: ExtractContext): ProseDocument {
+  const settings = (context.settings ?? {}) as JsxSettings
+  const ast = parseJsx(text)
+  const root = ast.program as unknown as BabelNode
+
+  const state: WalkState = { source: text, counter: 0, uri: context.uri, settings, root }
+
+  const blocks = collectBlocks(root, state).map(({ block }) => block)
 
   return {
     uri: context.uri,
     format: 'jsx',
     source: text,
-    blocks: state.blocks,
+    blocks,
     directives: collectDirectives(ast.comments ?? [], text),
   }
 }
@@ -325,6 +342,7 @@ export const jsxAdapter: LanguageAdapter = {
   id: 'jsx',
   extensions: ['.jsx', '.tsx'],
   extract,
+  stamp,
   writer: jsxWriter,
 }
 

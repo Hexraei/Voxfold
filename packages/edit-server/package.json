@@ -1,0 +1,34 @@
+{
+  "name": "@voxfold/edit-server",
+  "version": "0.0.0",
+  "description": "Transport-agnostic dev-server handlers for Voxfold's overlay: stamp registry, resolve, plan, apply, undo, suppress.",
+  "license": "MIT",
+  "type": "module",
+  "sideEffects": false,
+  "engines": {
+    "node": "^22.12.0 || >=24.0.0"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.mts",
+      "default": "./dist/index.mjs"
+    },
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsdown",
+    "typecheck": "tsc -p tsconfig.json"
+  },
+  "dependencies": {
+    "@voxfold/core": "workspace:*",
+    "@voxfold/writer": "workspace:*",
+    "launch-editor": "2.14.1"
+  },
+  "devDependencies": {
+    "@voxfold/lang-jsx": "workspace:*",
+    "@voxfold/rules-recommended": "workspace:*"
+  }
+}
