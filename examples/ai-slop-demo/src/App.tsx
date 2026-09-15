@@ -1,6 +1,8 @@
 export function App() {
   return (
-    <div style={{ maxWidth: 760, margin: '0 auto', padding: '3rem 1.5rem', fontFamily: 'system-ui' }}>
+    <div
+      style={{ maxWidth: 760, margin: '0 auto', padding: '3rem 1.5rem', fontFamily: 'system-ui' }}
+    >
       <header>
         <p style={{ letterSpacing: '0.08em', textTransform: 'uppercase', color: '#6366f1' }}>
           Synthara
@@ -18,10 +20,10 @@ export function App() {
       <section>
         <h2>Why teams choose Synthara</h2>
         <p>
-          Our cutting-edge platform seamlessly integrates with your existing stack, so you can
-          use world-class infrastructure effortlessly. Whether you're a solo founder or a
-          large enterprise team, Synthara empowers you to unlock insights that were previously
-          impossible to reach.
+          Our cutting-edge platform seamlessly integrates with your existing stack, so you can use
+          world-class infrastructure effortlessly. Whether you're a solo founder or a large
+          enterprise team, Synthara empowers you to unlock insights that were previously impossible
+          to reach.
         </p>
         <p>
           Say goodbye to scattered spreadsheets and endless status meetings. Our robust,

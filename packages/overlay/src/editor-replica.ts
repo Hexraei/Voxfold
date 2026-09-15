@@ -50,6 +50,10 @@ export function createEditorReplica(sourceElement: Element, initialText: string)
   el.contentEditable = 'true'
   el.spellcheck = true
   el.style.position = 'fixed'
+  // Appended inside the overlay root, which is `pointer-events: none` so the full-viewport
+  // layer never blocks clicks on the real page — every actual interactive element inside it,
+  // this one included, has to opt back in explicitly or it's visible but unclickable.
+  el.style.pointerEvents = 'auto'
   el.style.left = `${rect.left}px`
   el.style.top = `${rect.top}px`
   el.style.width = `${rect.width}px`
