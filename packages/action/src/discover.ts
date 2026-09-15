@@ -14,7 +14,7 @@ export async function discoverFiles(cwd: string, patterns: string[]): Promise<st
     if (existsSync(literalPath)) {
       const stat = statSync(literalPath)
       if (stat.isDirectory()) {
-        const entries = await fg('**/*.{md,markdown,mdx,html,htm,jsx,tsx,vue}', {
+        const entries = await fg('**/*.{md,markdown,mdx,html,htm,jsx,tsx,vue,svelte}', {
           cwd: literalPath,
           absolute: true,
           dot: false,

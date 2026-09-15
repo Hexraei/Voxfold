@@ -29,6 +29,7 @@
     "@voxfold/lang-html": "workspace:*",
     "@voxfold/lang-jsx": "workspace:*",
     "@voxfold/lang-markdown": "workspace:*",
+    "@voxfold/lang-svelte": "workspace:*",
     "@voxfold/lang-vue": "workspace:*",
     "fast-check": "4.10.0"
   }

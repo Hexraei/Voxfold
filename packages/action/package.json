@@ -21,6 +21,7 @@
     "@voxfold/lang-html": "workspace:*",
     "@voxfold/lang-jsx": "workspace:*",
     "@voxfold/lang-markdown": "workspace:*",
+    "@voxfold/lang-svelte": "workspace:*",
     "@voxfold/lang-vue": "workspace:*",
     "@voxfold/rules-recommended": "workspace:*",
     "fast-glob": "3.3.3",
