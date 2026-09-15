@@ -1,0 +1,58 @@
+{
+  "name": "@voxfold/next",
+  "version": "0.0.0",
+  "description": "Next.js integration: webpack + Turbopack stamp loader, sidecar edit-server, overlay injection, RSC-aware editing.",
+  "license": "MIT",
+  "type": "module",
+  "sideEffects": [
+    "./dist/overlay.mjs"
+  ],
+  "engines": {
+    "node": "^22.12.0 || >=24.0.0"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.mts",
+      "default": "./dist/index.mjs"
+    },
+    "./overlay": {
+      "types": "./dist/overlay.d.mts",
+      "default": "./dist/overlay.mjs"
+    },
+    "./loader": {
+      "types": "./dist/loader.d.mts",
+      "default": "./dist/loader.mjs"
+    },
+    "./component": {
+      "types": "./dist/component.d.mts",
+      "default": "./dist/component.mjs"
+    },
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsdown",
+    "typecheck": "tsc -p tsconfig.json"
+  },
+  "peerDependencies": {
+    "next": ">=15.0.0",
+    "react": ">=18.0.0",
+    "react-dom": ">=18.0.0"
+  },
+  "dependencies": {
+    "@voxfold/core": "workspace:*",
+    "@voxfold/edit-server": "workspace:*",
+    "@voxfold/lang-jsx": "workspace:*",
+    "@voxfold/overlay": "workspace:*",
+    "@voxfold/rules-recommended": "workspace:*",
+    "preact": "10.29.8"
+  },
+  "devDependencies": {
+    "@types/react": "19.3.0",
+    "next": "16.3.5",
+    "react": "19.3.0",
+    "react-dom": "19.3.0"
+  }
+}

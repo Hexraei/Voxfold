@@ -1,0 +1,7 @@
+.next
+.voxfold
+next-env.d.ts
+AGENTS.md
+CLAUDE.md
+node_modules
+tsconfig.tsbuildinfo
