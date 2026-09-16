@@ -1,4 +1,6 @@
-# Voxfold
+<p align="center">
+  <img src=".github/assets/logo.png" alt="Voxfold" width="480">
+</p>
 
 A style linter for the copy voice that AI-generated sites share: em-dash clusters,
 "it's not just X, it's Y", "Fast. Simple. Secure.", "seamlessly", "robust".
