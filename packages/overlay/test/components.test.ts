@@ -1,5 +1,5 @@
 import type { Flag, Score } from '@voxfold/core'
-import { render } from 'preact'
+import { h, render } from 'preact'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import { Badge } from '../src/components/Badge.tsx'
 import { FlagPanel } from '../src/components/FlagPanel.tsx'
@@ -139,10 +139,10 @@ describe('FlagPanel', () => {
 describe('FlagPopover', () => {
   const noop = () => {}
 
-  it('shows an Edit button and Apply fix when the flag is editable and has a mechanical fix', () => {
+  it('shows a Manual fix button and Quick fix when the flag is editable and has a mechanical fix', () => {
     const flagWithFix: Flag = { ...baseFlag, fix: [{ start: 3, end: 11, text: 'use' }] }
     const container = mountFor(
-      FlagPopover({
+      h(FlagPopover, {
         flag: flagWithFix,
         editable: true,
         onEdit: noop,
@@ -153,13 +153,13 @@ describe('FlagPopover', () => {
         onClose: noop,
       }),
     )
-    expect(container.textContent).toContain('Edit')
-    expect(container.textContent).toContain('Apply fix')
+    expect(container.textContent).toContain('Manual fix')
+    expect(container.textContent).toContain('Quick fix')
   })
 
-  it('shows only Edit (no Apply fix) when the flag is editable but has no mechanical fix', () => {
+  it('shows only Manual fix (no Quick fix) when the flag is editable but has no mechanical fix', () => {
     const container = mountFor(
-      FlagPopover({
+      h(FlagPopover, {
         flag: baseFlag,
         editable: true,
         onEdit: noop,
@@ -170,13 +170,13 @@ describe('FlagPopover', () => {
         onClose: noop,
       }),
     )
-    expect(container.textContent).toContain('Edit')
-    expect(container.textContent).not.toContain('Apply fix')
+    expect(container.textContent).toContain('Manual fix')
+    expect(container.textContent).not.toContain('Quick fix')
   })
 
   it('shows a lock explanation and no Edit button when not editable', () => {
     const container = mountFor(
-      FlagPopover({
+      h(FlagPopover, {
         flag: baseFlag,
         editable: false,
         lockReason: 'map',
@@ -195,7 +195,7 @@ describe('FlagPopover', () => {
   it('calls onIgnore when the Ignore button is clicked', () => {
     const onIgnore = vi.fn()
     const container = mountFor(
-      FlagPopover({
+      h(FlagPopover, {
         flag: baseFlag,
         editable: true,
         onEdit: noop,
@@ -222,7 +222,7 @@ describe('FlagPopover', () => {
       ],
     }
     const container = mountFor(
-      FlagPopover({
+      h(FlagPopover, {
         flag: flagWithSuggestions,
         editable: true,
         onEdit: noop,

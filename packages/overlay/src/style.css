@@ -254,6 +254,42 @@
   background: #4338ca;
 }
 
+.vf-quickfix-wrap {
+  position: relative;
+  display: inline-flex;
+}
+
+.vf-quickfix-preview {
+  position: absolute;
+  bottom: calc(100% + 8px);
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+  background: #111827;
+  color: #fff;
+  border-radius: 6px;
+  padding: 6px 10px;
+  font-size: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  z-index: 1;
+}
+
+.vf-quickfix-before {
+  color: #fca5a5;
+  text-decoration: line-through;
+}
+
+.vf-quickfix-arrow {
+  color: #9ca3af;
+}
+
+.vf-quickfix-after {
+  color: #86efac;
+}
+
 .vf-toast {
   position: fixed;
   left: 50%;

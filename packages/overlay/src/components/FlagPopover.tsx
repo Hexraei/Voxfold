@@ -3,9 +3,15 @@
  * done about it. Actions are gated on what the resolved DOM range actually allows — a locked
  * segment (a `.map()`, a bare variable, an inline expression) never offers "Edit," only an
  * explanation of why not.
+ *
+ * "Quick fix" (a rule's `fix`) is the one-click, no-judgment-call path — hovering it previews
+ * the exact before/after text so committing to it isn't a leap of faith. Everything else
+ * (`suggest` choices, or no fix at all) is a "Manual fix": it opens the in-page editor instead
+ * of guessing on the human's behalf.
  */
 
 import type { Flag } from '@voxfold/core'
+import { useState } from 'preact/hooks'
 
 export interface FlagPopoverProps {
   flag: Flag
@@ -32,6 +38,12 @@ const LOCK_EXPLANATIONS: Record<string, string> = {
   unknown: "This text can't be traced back to an editable source.",
 }
 
+/** The flagged text as it reads today, and what a rule's `fix` would turn it into. */
+function fixPreview(flag: Flag): { before: string; after: string } | null {
+  if (!flag.fix || flag.fix.length === 0) return null
+  return { before: flag.text, after: flag.fix.map((edit) => edit.text).join('') }
+}
+
 export function FlagPopover(props: FlagPopoverProps) {
   const {
     flag,
@@ -44,6 +56,8 @@ export function FlagPopover(props: FlagPopoverProps) {
     onOpenInEditor,
     onClose,
   } = props
+  const [previewing, setPreviewing] = useState(false)
+  const preview = fixPreview(flag)
 
   return (
     <div class="vf-popover" style={props.style} role="dialog" aria-label={flag.message}>
@@ -58,17 +72,30 @@ export function FlagPopover(props: FlagPopoverProps) {
 
       <div class="vf-popover-actions">
         {editable && flag.fix ? (
-          <button
-            type="button"
-            class="vf-popover-action vf-popover-action-primary"
-            onClick={onApplyFix}
-          >
-            Apply fix
-          </button>
+          <span class="vf-quickfix-wrap">
+            <button
+              type="button"
+              class="vf-popover-action vf-popover-action-primary"
+              onClick={onApplyFix}
+              onMouseEnter={() => setPreviewing(true)}
+              onMouseLeave={() => setPreviewing(false)}
+              onFocus={() => setPreviewing(true)}
+              onBlur={() => setPreviewing(false)}
+            >
+              Quick fix
+            </button>
+            {previewing && preview ? (
+              <span class="vf-quickfix-preview" role="tooltip">
+                <span class="vf-quickfix-before">{preview.before}</span>
+                <span class="vf-quickfix-arrow">→</span>
+                <span class="vf-quickfix-after">{preview.after}</span>
+              </span>
+            ) : null}
+          </span>
         ) : null}
         {editable ? (
           <button type="button" class="vf-popover-action" onClick={onEdit}>
-            Edit
+            Manual fix
           </button>
         ) : null}
         {flag.suggestions?.map((suggestion, index) => (

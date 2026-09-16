@@ -126,12 +126,22 @@ export function App(props: AppProps) {
     const resolved = resolveFlagToDom(flag, blocksRef.current, refsRef.current)
     const first = resolved[0]
     if (first) {
-      const rect = first.range.getBoundingClientRect()
-      setPopoverPosition({ top: rect.bottom + 8, left: rect.left })
-      first.range.startContainer.parentElement?.scrollIntoView({
-        block: 'center',
-        behavior: 'smooth',
-      })
+      const target = first.range.startContainer.parentElement
+      // Position AFTER scrollIntoView settles, not before: reading getBoundingClientRect() here
+      // and then scrolling (especially with smooth-scroll's own animation) leaves the popover's
+      // `position: fixed` coordinates stale against wherever the page ends up, not where the
+      // flagged text actually lands — reproduced with a flag far enough down the page that the
+      // popover rendered hundreds of pixels off-screen.
+      target?.scrollIntoView({ block: 'center', behavior: 'smooth' })
+      const reposition = () => {
+        const rect = first.range.getBoundingClientRect()
+        setPopoverPosition({ top: rect.bottom + 8, left: rect.left })
+      }
+      // requestAnimationFrame alone can still fire mid-scroll on some engines; a short delay
+      // matched to typical smooth-scroll duration is the pragmatic fix here, not a real
+      // "scroll finished" event (there isn't one for scrollIntoView).
+      reposition()
+      window.setTimeout(reposition, 400)
     } else {
       setPopoverPosition(null)
     }
@@ -175,31 +185,79 @@ export function App(props: AppProps) {
     [api, closePopover],
   )
 
+  /**
+   * Opens the in-page editor for `flag` directly, without going through `selectedFlag` state
+   * first — needed by the double-click-on-underline path, where setting `selectedFlag` and then
+   * immediately reading it back in the same handler would race Preact's async state update and
+   * see the stale (null) value. The "Manual fix" popover button still goes through
+   * `startEdit()` below, which just forwards the already-selected flag here.
+   */
+  const startEditForFlag = useCallback(
+    (flag: Flag) => {
+      const resolved = resolveFlagToDom(flag, blocksRef.current, refsRef.current)
+      const target = resolved[0]
+      if (!target?.ref) return
+
+      const sourceElement = target.ref.node.parentElement
+      if (!sourceElement) return
+
+      setEditing(true)
+      const replica = createEditorReplica(sourceElement, target.ref.node.data)
+      editorRef.current = replica
+      layer.appendChild(replica.element)
+      replica.setCaret(flag.flatRange[0])
+
+      replica.onCancel(() => {
+        replica.destroy()
+        editorRef.current = null
+        setEditing(false)
+      })
+
+      replica.onCommit(() => {
+        commitEdit(flag, replica.getValue())
+      })
+    },
+    [commitEdit, layer],
+  )
+
   const startEdit = useCallback(() => {
     if (!selectedFlag) return
-    const resolved = resolveFlagToDom(selectedFlag, blocksRef.current, refsRef.current)
-    const target = resolved[0]
-    if (!target?.ref) return
+    startEditForFlag(selectedFlag)
+  }, [selectedFlag, startEditForFlag])
 
-    const sourceElement = target.ref.node.parentElement
-    if (!sourceElement) return
+  // Double-clicking a highlighted (underlined) word jumps straight into the editor — the popover
+  // still opens first (same position logic openPopoverForFlag already uses) so a double-click
+  // reads as "select, then immediately edit" rather than skipping the selection UI entirely.
+  useEffect(() => {
+    if (!highlightsOn) return
 
-    setEditing(true)
-    const replica = createEditorReplica(sourceElement, target.ref.node.data)
-    editorRef.current = replica
-    layer.appendChild(replica.element)
-    replica.setCaret(selectedFlag.flatRange[0])
+    const onDblClick = (event: MouseEvent) => {
+      const point = document.caretPositionFromPoint?.(event.clientX, event.clientY)
+      if (!point) return
 
-    replica.onCancel(() => {
-      replica.destroy()
-      editorRef.current = null
-      setEditing(false)
-    })
+      for (const flag of lintState.flags) {
+        const resolved = resolveFlagToDom(flag, blocksRef.current, refsRef.current)
+        const hit = resolved.some(({ range }) => {
+          try {
+            return range.isPointInRange(point.offsetNode, point.offset)
+          } catch {
+            // isPointInRange throws if offsetNode isn't in the same tree as the range's — not
+            // this flag's range, just try the next one.
+            return false
+          }
+        })
+        if (hit) {
+          event.preventDefault()
+          openPopoverForFlag(flag)
+          startEditForFlag(flag)
+          return
+        }
+      }
+    }
 
-    replica.onCommit(() => {
-      commitEdit(selectedFlag, replica.getValue())
-    })
-  }, [selectedFlag, commitEdit, layer])
+    document.addEventListener('dblclick', onDblClick)
+    return () => document.removeEventListener('dblclick', onDblClick)
+  }, [highlightsOn, lintState, openPopoverForFlag, startEditForFlag])
 
   /**
    * A mechanical fix or suggestion's edits are `SourceEdit`s in the SAME per-segment-local
