@@ -9,6 +9,10 @@
  * covers, with editing happening entirely inside it — the real page is never touched until commit.
  */
 
+const EDITOR_ACCENT_COLOR = '#0ea5e9'
+const EDITOR_BORDER_WIDTH = 2
+const HANDLE_SIZE = 6
+
 const CLONED_PROPERTIES = [
   'font-family',
   'font-size',
@@ -85,12 +89,9 @@ export function createEditorReplica(sourceElement: Element, initialText: string)
   el.style.width = '100%'
   el.style.pointerEvents = 'auto'
   el.style.boxSizing = 'border-box'
-  // A Figma-style selection box: a solid 1px border (not an outline, so the corner handles can
-  // sit exactly on it) plus a soft glow instead of a thick colored outline — reads as "this
-  // region is being edited" without the heavier, more intrusive look outline gave it.
-  el.style.border = '1px solid #0ea5e9'
-  el.style.borderRadius = '2px'
-  el.style.boxShadow = '0 0 0 3px rgba(14, 165, 233, 0.15)'
+  // A single, solid, thick border — no separate glow/shadow ring layered on top of it, which
+  // read as a "double border" rather than one clean selection box.
+  el.style.border = `${EDITOR_BORDER_WIDTH}px solid ${EDITOR_ACCENT_COLOR}`
   // Transparent, not a fixed white fill: the replica sits exactly over the real block (same
   // rect, same cloned typography including `color`), so the page's own background — whatever
   // it is, light or dark — should show through underneath the text. A solid background here
@@ -108,20 +109,23 @@ export function createEditorReplica(sourceElement: Element, initialText: string)
 
   // Four small corner handles, Figma's own visual signature for "this is the selected/editable
   // region" — purely decorative (not draggable; this replica's size always matches the source
-  // block exactly).
+  // block exactly). Solid fill in the same single accent color as the border, no separate
+  // border of their own — a bordered handle on top of a bordered box was the other half of the
+  // "double border" look. Centered exactly on the border line (offset by half the handle size
+  // minus half the border width), not floating outside it.
+  const handleOffset = HANDLE_SIZE / 2 + EDITOR_BORDER_WIDTH / 2
   for (const corner of ['tl', 'tr', 'bl', 'br'] as const) {
     const handle = document.createElement('div')
     handle.style.position = 'absolute'
-    handle.style.width = '6px'
-    handle.style.height = '6px'
-    handle.style.background = '#fff'
-    handle.style.border = '1.5px solid #0ea5e9'
+    handle.style.width = `${HANDLE_SIZE}px`
+    handle.style.height = `${HANDLE_SIZE}px`
+    handle.style.background = EDITOR_ACCENT_COLOR
     handle.style.borderRadius = '1px'
     handle.style.pointerEvents = 'none'
-    handle.style.top = corner.startsWith('t') ? '-4px' : 'auto'
-    handle.style.bottom = corner.startsWith('b') ? '-4px' : 'auto'
-    handle.style.left = corner.endsWith('l') ? '-4px' : 'auto'
-    handle.style.right = corner.endsWith('r') ? '-4px' : 'auto'
+    handle.style.top = corner.startsWith('t') ? `-${handleOffset}px` : 'auto'
+    handle.style.bottom = corner.startsWith('b') ? `-${handleOffset}px` : 'auto'
+    handle.style.left = corner.endsWith('l') ? `-${handleOffset}px` : 'auto'
+    handle.style.right = corner.endsWith('r') ? `-${handleOffset}px` : 'auto'
     wrapper.appendChild(handle)
   }
 
@@ -159,6 +163,24 @@ export function createEditorReplica(sourceElement: Element, initialText: string)
   // keeps the two from double-firing.
   el.addEventListener('focusout', commitOnce)
 
+  // `wrapper` is `position: fixed` (viewport-relative) so it can sit above everything regardless
+  // of any ancestor's own stacking/overflow context — but that also means it does NOT
+  // automatically track sourceElement's position as the page scrolls, the way an `absolute`
+  // element in normal flow would. Left alone, scrolling the page moves the real (hidden) text
+  // out from under a box that stays glued to the same spot on screen — the box visibly
+  // "follows" the scroll instead of tracking its target. Recomputing left/top from the source
+  // element's live getBoundingClientRect() on every scroll/resize keeps it locked to the text
+  // it covers; `getBoundingClientRect()` stays accurate on a `visibility: hidden` element since
+  // hidden (unlike `display: none`) still participates in layout.
+  const reposition = () => {
+    const liveRect = sourceElement.getBoundingClientRect()
+    wrapper.style.left = `${liveRect.left}px`
+    wrapper.style.top = `${liveRect.top}px`
+    wrapper.style.width = `${liveRect.width}px`
+  }
+  window.addEventListener('scroll', reposition, true)
+  window.addEventListener('resize', reposition)
+
   return {
     element: wrapper,
     getValue: () => el.textContent ?? '',
@@ -167,6 +189,8 @@ export function createEditorReplica(sourceElement: Element, initialText: string)
     },
     setCaret: (offset) => setCaretAt(el, offset),
     destroy: () => {
+      window.removeEventListener('scroll', reposition, true)
+      window.removeEventListener('resize', reposition)
       wrapper.remove()
       if (sourceEl) sourceEl.style.visibility = previousVisibility
     },
@@ -187,5 +211,10 @@ function setCaretAt(el: HTMLElement, offset: number): void {
   const selection = window.getSelection()
   selection?.removeAllRanges()
   selection?.addRange(range)
-  el.focus()
+  // preventScroll: the caller (App.tsx's openPopoverForFlag) already scrolls the flagged text
+  // into view itself, timed against its own popover-repositioning logic — a plain focus() here
+  // triggers the browser's OWN native "scroll the newly focused element into view" behavior on
+  // top of that, and the two fighting each other is what was producing a visible scroll jump
+  // right as the editor opened.
+  el.focus({ preventScroll: true })
 }

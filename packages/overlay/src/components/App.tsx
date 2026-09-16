@@ -127,21 +127,34 @@ export function App(props: AppProps) {
     const first = resolved[0]
     if (first) {
       const target = first.range.startContainer.parentElement
-      // Position AFTER scrollIntoView settles, not before: reading getBoundingClientRect() here
-      // and then scrolling (especially with smooth-scroll's own animation) leaves the popover's
-      // `position: fixed` coordinates stale against wherever the page ends up, not where the
-      // flagged text actually lands — reproduced with a flag far enough down the page that the
-      // popover rendered hundreds of pixels off-screen.
-      target?.scrollIntoView({ block: 'center', behavior: 'smooth' })
+      const targetRect = target?.getBoundingClientRect()
+      // Only scroll when the target genuinely isn't fully visible — `scrollIntoView({block:
+      // 'center'})` re-centers unconditionally even when the element is already fully on
+      // screen, which was producing a visible, unnecessary jump on every single click/
+      // double-click, including ones on text already comfortably in view.
+      const alreadyVisible =
+        targetRect &&
+        targetRect.top >= 0 &&
+        targetRect.bottom <= window.innerHeight &&
+        targetRect.left >= 0 &&
+        targetRect.right <= window.innerWidth
+      if (!alreadyVisible) {
+        target?.scrollIntoView({ block: 'center', behavior: 'smooth' })
+      }
       const reposition = () => {
         const rect = first.range.getBoundingClientRect()
         setPopoverPosition({ top: rect.bottom + 8, left: rect.left })
       }
-      // requestAnimationFrame alone can still fire mid-scroll on some engines; a short delay
-      // matched to typical smooth-scroll duration is the pragmatic fix here, not a real
-      // "scroll finished" event (there isn't one for scrollIntoView).
+      // Position AFTER scrollIntoView settles, not before: reading getBoundingClientRect() here
+      // and then scrolling (especially with smooth-scroll's own animation) leaves the popover's
+      // `position: fixed` coordinates stale against wherever the page ends up, not where the
+      // flagged text actually lands — reproduced with a flag far enough down the page that the
+      // popover rendered hundreds of pixels off-screen. requestAnimationFrame alone can still
+      // fire mid-scroll on some engines; a short delay matched to typical smooth-scroll duration
+      // is the pragmatic fix here, not a real "scroll finished" event (scrollIntoView has none).
+      // When nothing needed scrolling, this still costs nothing — reposition() is idempotent.
       reposition()
-      window.setTimeout(reposition, 400)
+      if (!alreadyVisible) window.setTimeout(reposition, 400)
     } else {
       setPopoverPosition(null)
     }
