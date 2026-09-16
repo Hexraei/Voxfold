@@ -104,12 +104,21 @@ export function App(props: AppProps) {
       renderer.clear()
       return
     }
-    const entries = lintState.flags.flatMap((flag) => {
-      const resolved = resolveFlagToDom(flag, blocksRef.current, refsRef.current)
-      return resolved.map((r) => ({ id: flag.hash, range: r.range, category: flag.category }))
-    })
+    // Exclude every flag in the block currently being edited: a CSS Custom Highlight paints
+    // independently of the Range's own element's `visibility` (confirmed empirically — hiding
+    // the source element while the replica edits on top of it does NOT stop its `::highlight()`
+    // wavy underline from still rendering through), so the only way to actually stop a flagged
+    // word's underline from showing while its block is being edited is to stop registering a
+    // Range for it in the first place.
+    const editingBlockId = editing ? selectedFlag?.blockId : undefined
+    const entries = lintState.flags
+      .filter((flag) => flag.blockId !== editingBlockId)
+      .flatMap((flag) => {
+        const resolved = resolveFlagToDom(flag, blocksRef.current, refsRef.current)
+        return resolved.map((r) => ({ id: flag.hash, range: r.range, category: flag.category }))
+      })
     renderer.render(entries)
-  }, [highlightsOn, lintState, layer])
+  }, [highlightsOn, lintState, layer, editing, selectedFlag])
 
   // Alt+Shift+V toggles highlights globally.
   useEffect(() => {
