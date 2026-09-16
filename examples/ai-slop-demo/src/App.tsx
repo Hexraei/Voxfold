@@ -31,7 +31,7 @@ export function App() {
           <span className="eyebrow">✨ Introducing Synthara 2.0</span>
           <h1>Bring out your team's full potential with next-level workflow intelligence</h1>
           <p className="hero-sub">
-            In today's fast-paced world, teams need more than just another dashboard , they need a
+            In today's world, teams need more than just another dashboard , they need a
             partner. Synthara isn't just a productivity tool, it's a complete transformation of how
             your organization gets things done.
           </p>
