@@ -77,11 +77,15 @@
   background: transparent;
   border-radius: 999px;
   cursor: pointer;
-  font-size: 14px;
+  color: #111827;
 }
 
 .vf-badge-toggle:hover {
   background: #f3f4f6;
+}
+
+.vf-badge-toggle-on {
+  color: #dc2626;
 }
 
 .vf-panel {

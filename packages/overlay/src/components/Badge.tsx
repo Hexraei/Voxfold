@@ -53,12 +53,27 @@ export function Badge(props: BadgeProps) {
       </button>
       <button
         type="button"
-        class="vf-badge-toggle"
+        class={`vf-badge-toggle${highlightsOn ? ' vf-badge-toggle-on' : ''}`}
         aria-pressed={highlightsOn}
         title={highlightsOn ? 'Hide underlines (Alt+Shift+V)' : 'Show underlines (Alt+Shift+V)'}
         onClick={onToggleHighlights}
       >
-        {highlightsOn ? '👁' : '👁‍🗨'}
+        <svg
+          class="vf-eye-icon"
+          viewBox="0 0 20 20"
+          width="16"
+          height="16"
+          fill="none"
+          aria-hidden="true"
+        >
+          <path
+            d="M1.5 10S4.5 4 10 4s8.5 6 8.5 6-3 6-8.5 6-8.5-6-8.5-6Z"
+            stroke="currentColor"
+            stroke-width="1.5"
+            stroke-linejoin="round"
+          />
+          <circle cx="10" cy="10" r="2.25" stroke="currentColor" stroke-width="1.5" />
+        </svg>
       </button>
     </div>
   )
