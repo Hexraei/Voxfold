@@ -40,7 +40,7 @@ export function App(props: AppProps) {
   const [selectedFlag, setSelectedFlag] = useState<Flag | null>(null)
   const [popoverPosition, setPopoverPosition] = useState<{ top: number; left: number } | null>(null)
   const [editing, setEditing] = useState(false)
-  const [toast, setToast] = useState<string | null>(null)
+  const [toast, setToast] = useState<{ message: string; undoPath?: string } | null>(null)
 
   const blocksRef = useRef<ReturnType<typeof flattenDocument>['blocks']>([])
   const refsRef = useRef<TextRef[]>([])
@@ -194,9 +194,11 @@ export function App(props: AppProps) {
         await api.apply(resolvedRefs.relativePath, planned.fileHash, [
           { ref: matchingRef.ref, expectedOldText: target.ref.node.data, newText: newFullText },
         ])
-        setToast('Saved. Undo?')
+        setToast({ message: 'Saved.', undoPath: resolvedRefs.relativePath })
       } catch (error) {
-        setToast(error instanceof Error ? `Could not save: ${error.message}` : 'Could not save.')
+        setToast({
+          message: error instanceof Error ? `Could not save: ${error.message}` : 'Could not save.',
+        })
       } finally {
         editorRef.current?.destroy()
         editorRef.current = null
@@ -205,6 +207,21 @@ export function App(props: AppProps) {
       }
     },
     [api, closePopover],
+  )
+
+  const undoLastEdit = useCallback(
+    async (relativePath: string) => {
+      try {
+        await api.undo(relativePath)
+        setToast({ message: 'Undone.' })
+        scheduleRelint()
+      } catch (error) {
+        setToast({
+          message: error instanceof Error ? `Could not undo: ${error.message}` : 'Could not undo.',
+        })
+      }
+    },
+    [api, scheduleRelint],
   )
 
   /**
@@ -387,7 +404,19 @@ export function App(props: AppProps) {
       ) : null}
       {toast ? (
         <div class="vf-toast">
-          {toast}
+          {toast.message}
+          {toast.undoPath ? (
+            <button
+              type="button"
+              onClick={() => {
+                const path = toast.undoPath
+                setToast(null)
+                if (path) undoLastEdit(path)
+              }}
+            >
+              Undo
+            </button>
+          ) : null}
           <button type="button" onClick={() => setToast(null)}>
             Dismiss
           </button>
