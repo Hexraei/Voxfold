@@ -8,7 +8,10 @@
  * every lint pass, so the overlay never reports tells about its own UI copy.
  */
 
+import { highlightStylesheet } from './highlight.ts'
+
 export const OVERLAY_ROOT_ID = 'voxfold-overlay-root'
+const HIGHLIGHT_STYLE_ID = 'voxfold-highlight-styles'
 
 export interface OverlayMount {
   root: HTMLElement
@@ -21,6 +24,18 @@ export interface OverlayMount {
 export function mountOverlay(styles: string): OverlayMount {
   const existing = document.getElementById(OVERLAY_ROOT_ID)
   if (existing) existing.remove() // HMR: a stale overlay from before a module reload.
+
+  // `::highlight(name)` only ever applies within the document/shadow-tree context where the
+  // rule itself is declared — a rule inside this overlay's own shadow root can never style a
+  // Highlight whose Ranges point at text nodes in the app's real (light DOM) page content. This
+  // stylesheet has to go in the main document, not alongside the rest of the overlay's UI CSS.
+  let highlightStyleEl = document.getElementById(HIGHLIGHT_STYLE_ID)
+  if (!highlightStyleEl) {
+    highlightStyleEl = document.createElement('style')
+    highlightStyleEl.id = HIGHLIGHT_STYLE_ID
+    document.head.appendChild(highlightStyleEl)
+  }
+  highlightStyleEl.textContent = highlightStylesheet()
 
   const root = document.createElement('div')
   root.id = OVERLAY_ROOT_ID
@@ -46,6 +61,9 @@ export function mountOverlay(styles: string): OverlayMount {
     root,
     shadow,
     layer,
-    unmount: () => root.remove(),
+    unmount: () => {
+      root.remove()
+      highlightStyleEl?.remove()
+    },
   }
 }
