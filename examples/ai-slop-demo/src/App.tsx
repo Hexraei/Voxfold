@@ -65,8 +65,8 @@ export function App() {
           <div className="section-head">
             <h2>Why teams choose Synthara</h2>
             <p>
-              Our cutting-edge platform seamlessly integrates with your existing stack, so you can
-              utilize world-class infrastructure effortlessly.
+              Our cutting-edge platform integrates with your existing stack, so you can utilize
+              world-class infrastructure effortlessly.
             </p>
           </div>
           <div className="grid">
