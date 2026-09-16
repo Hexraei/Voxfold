@@ -29,11 +29,11 @@ export function App() {
       <header className="hero">
         <div className="wrap">
           <span className="eyebrow">✨ Introducing Synthara 2.0</span>
-          <h1>Bring out your team's full potential with next-level workflow intelligence</h1>
+          <h1>Bring out your team's full potential with upscaled workflow intelligence</h1>
           <p className="hero-sub">
-            In today's world, teams need more than just another dashboard , they need a
-            partner. Synthara isn't just a productivity tool, it's a complete transformation of how
-            your organization gets things done.
+            In today's world, teams need more than just another dashboard , they need a partner.
+            Synthara isn't just a productivity tool, it's a complete transformation of how your
+            organization gets things done.
           </p>
           <div className="hero-actions">
             <button type="button" className="btn btn-primary">
