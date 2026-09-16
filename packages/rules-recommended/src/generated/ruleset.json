@@ -433,11 +433,13 @@
           "threshold": 5
         }
       },
+      "fix": {
+        "type": "replace",
+        "map": {
+          "*": ", "
+        }
+      },
       "suggest": [
-        {
-          "label": "comma",
-          "replace": ", "
-        },
         {
           "label": "full stop",
           "replace": ". ",

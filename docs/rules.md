@@ -101,7 +101,7 @@ you write the replacement — that is the whole point of the linter.
 | Rule | Weight | Density | Fix | Flags |
 |---|---|---|---|---|
 | `colon-reveal` | 3 | — | flag only | The result: teams ship twice as often. |
-| `em-dash` | 3 | 3+ per block | suggests: comma / full stop / colon | It ships fast—really fast—and it scales—quietly. |
+| `em-dash` | 3 | 3+ per block | auto-fix (replace) | It ships fast—really fast—and it scales—quietly. |
 | `double-hyphen-dash` | 2 | — | suggests: comma / full stop | It ships fast -- really fast. |
 | `exclamation-density` | 2 | 3+ per block | flag only | Ship faster! Build better! Scale further! |
 
@@ -272,7 +272,7 @@ Passes:
 
 Em dash — Em dashes cluster in generated copy. A comma, colon or full stop is usually clearer.
 
-- kind: mechanical, weight: 3, fix: suggests: comma / full stop / colon
+- kind: mechanical, weight: 3, fix: auto-fix (replace)
 
 Flags:
 - It ships fast—really fast—and it scales—quietly.

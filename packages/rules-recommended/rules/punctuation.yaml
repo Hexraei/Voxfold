@@ -21,9 +21,15 @@
   densityOverrides:
     heading:
       threshold: 5
+  # Comma is the most common correct replacement, so it's offered as a one-click "Quick fix" —
+  # not because it's provably the ONLY right answer (it isn't; see the module comment above),
+  # but because forcing every em dash through a 3-way manual choice is worse UX than a fast,
+  # good-enough default with a clearly-labeled manual escape hatch for the other two.
+  fix:
+    type: replace
+    map:
+      "*": ", "
   suggest:
-    - label: comma
-      replace: ", "
     - label: full stop
       replace: ". "
       recapitalize: true
