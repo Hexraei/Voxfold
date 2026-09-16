@@ -8,10 +8,10 @@ export function App() {
           Synthara
         </p>
         <h1 style={{ fontSize: '2.4rem', lineHeight: 1.15 }}>
-          Unlock your team's full potential with next-level workflow intelligence
+          Bring out your team's full potential with advanced workflow intelligence
         </h1>
         <p style={{ fontSize: '1.1rem', color: '#374151' }}>
-          In today's fast-paced world, teams need more than just another dashboard — they need a
+          In today's fast-paced world, teams need more than just another dashboard , they need a
           partner. Synthara isn't just a productivity tool, it's a complete transformation of how
           your organization gets things done.
         </p>
@@ -20,28 +20,27 @@ export function App() {
       <section>
         <h2>Why teams choose Synthara</h2>
         <p>
-          Our cutting-edge platform seamlessly integrates with your existing stack, so you can use
-          world-class infrastructure effortlessly. Whether you're a solo founder or a large
-          enterprise team, Synthara empowers you to unlock insights that were previously impossible
-          to reach.
+          Our cutting-edge platform integrates with your existing stack, so you can use world-class
+          infrastructure. Whether you're a solo founder or a large enterprise team, Synthara
+          empowers you to see insights that were previously impossible to reach.
         </p>
         <p>
-          Say goodbye to scattered spreadsheets and endless status meetings. Our robust,
-          meticulously crafted engine quietly syncs your data across every device you own, giving
-          you a truly holistic view of your entire workflow — from day one.
+          Putting an end to scattered spreadsheets and endless status meetings. Our carefully
+          crafted engine quietly syncs your data across every device you own, giving you a true
+          holistic view of your entire workflow , from day one.
         </p>
       </section>
 
       <section>
         <h2>Built for how modern teams actually work</h2>
         <p>
-          It's fast. It's simple. It's secure. From onboarding to scale, Synthara adapts to your
-          team's needs without missing a beat. Not just a tool — a philosophy.
+          From onboarding to scaling, our fast simple and secure Synthara adapts to your team's
+          needs without missing a beat. Not just a tool , a philosophy.
         </p>
         <ul>
           <li>Real-time collaboration that elevates every conversation</li>
-          <li>AI-powered insights that streamline your entire pipeline</li>
-          <li>A bespoke, curated dashboard built for you and your team</li>
+          <li>AI-powered insights that combines (put smth) your entire pipeline</li>
+          <li>A custom, curated dashboard built for you and your team</li>
         </ul>
       </section>
 
@@ -58,7 +57,7 @@ export function App() {
         <h2>Ready to get started?</h2>
         <p>
           At the end of the day, the tools you choose shape the way your team works. Let's dive in
-          and see what's possible when you truly unlock your organization's full potential — with a
+          and see what's possible when you bring out your organization's full potential , with a
           little help from Synthara.
         </p>
       </section>
