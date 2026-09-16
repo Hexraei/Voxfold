@@ -13,6 +13,12 @@ const EDITOR_ACCENT_COLOR = '#0ea5e9'
 const EDITOR_BORDER_WIDTH = 2
 const HANDLE_SIZE = 6
 
+// Deliberately no `margin`: the wrapper is already positioned and sized from the source
+// element's OWN getBoundingClientRect() (which already reflects any margin, including an
+// `auto` margin centering a narrower block inside a wider parent) — cloning margin onto `el`
+// as well double-applies it, shifting the editable box away from the wrapper (and its corner
+// handles) it's supposed to fill exactly. Reproduced with a `margin: 0 auto` centered block:
+// the wrapper and the editable div's actual rects were off by over 200px horizontally.
 const CLONED_PROPERTIES = [
   'font-family',
   'font-size',
@@ -26,7 +32,6 @@ const CLONED_PROPERTIES = [
   'white-space',
   'word-spacing',
   'padding',
-  'margin',
 ] as const
 
 export interface EditorReplica {
@@ -78,7 +83,13 @@ export function createEditorReplica(sourceElement: Element, initialText: string)
 
   const el = document.createElement('div')
   el.contentEditable = 'true'
-  el.spellcheck = true
+  // The browser's own native spellcheck squiggle (red, not something CSS can restyle or
+  // disable the color of) was rendering underneath words inside the editor at the same time as
+  // Voxfold's own blue selection border/handles — two different, uncoordinated underline/color
+  // systems stacked on the same text reads as "double colored," which is exactly the complaint.
+  // Voxfold already tells you what's wrong with the text; a second, unrelated red squiggle
+  // system layered on top adds noise, not information.
+  el.spellcheck = false
   // A normal in-flow child, not `position: absolute; inset: 0` — the wrapper has no height of
   // its own, so it must be SIZED BY its content (this div growing as the user types past the
   // original block's line count), not the other way around. Absolute-positioning el to fill a
