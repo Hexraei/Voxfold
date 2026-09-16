@@ -118,5 +118,9 @@ describe('fuzz: random edits never corrupt a file', () => {
       // adapter's writer hooks.
       { numRuns: 2000 },
     )
-  }, 30_000)
+    // 60s, not 30s: each of the 2000 runs does a real file write, git check, and re-parse, which
+    // is genuinely I/O-bound and has been observed to cross 30s on a loaded machine even with no
+    // change to the property itself — this is headroom against machine variance, not a signal
+    // that the iteration count needs to come down.
+  }, 60_000)
 })

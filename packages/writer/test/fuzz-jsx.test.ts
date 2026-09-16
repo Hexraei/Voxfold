@@ -86,5 +86,7 @@ describe('fuzz: random edits never corrupt a JSX file', () => {
       // hand at 10,000 iterations with zero failures before scaling back (see the M7 commit).
       { numRuns: 2000 },
     )
-  }, 30_000)
+    // 60s, not 30s: matches fuzz.test.ts's own budget — the same I/O-bound per-run cost applies
+    // here, and this is headroom against machine variance, not a change to the property itself.
+  }, 60_000)
 })

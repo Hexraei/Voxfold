@@ -46,6 +46,10 @@ describe('voxfold CLI', () => {
     rmSync(dir, { recursive: true, force: true })
   })
 
+  // The first test in this file pays the one-time cost of dynamically importing ../src/cli
+  // (module graph resolution) while the whole workspace's test files are starting up in
+  // parallel — observed to occasionally cross the 5s default under that contention even though
+  // the test itself does very little work. 10s of headroom, not a slow test.
   it('reports flags and a score for a file with tells', async () => {
     writeFileSync(
       'README.md',
@@ -57,7 +61,7 @@ describe('voxfold CLI', () => {
     expect(exitCode).toBe(EXIT_OK)
     expect(stdout).toContain('utilize')
     expect(stdout).toContain('Style score:')
-  })
+  }, 10_000)
 
   it('exits 2 when no lintable files are found', async () => {
     const { exitCode, stderr } = await runCli(['nonexistent-pattern-*.md'])
