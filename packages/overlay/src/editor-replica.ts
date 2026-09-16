@@ -46,6 +46,16 @@ export function createEditorReplica(sourceElement: Element, initialText: string)
   const computed = getComputedStyle(sourceElement)
   const rect = sourceElement.getBoundingClientRect()
 
+  // The replica is transparent (see below) so the real page's background shows through it —
+  // but with the source element's own text still rendered underneath at its own line-wrapped
+  // width, the two visibly overlap the moment the replica's width/font metrics don't match to
+  // the pixel (which they don't have to, e.g. a scrollbar appearing changes available width).
+  // Hidden here, restored in destroy() (every exit path — commit, cancel, Escape — calls it),
+  // via `visibility`, not `display`, so the page's own layout never reflows around the edit.
+  const sourceEl = sourceElement instanceof HTMLElement ? sourceElement : null
+  const previousVisibility = sourceEl?.style.visibility ?? ''
+  if (sourceEl) sourceEl.style.visibility = 'hidden'
+
   // A non-editable positioning wrapper holds the actual contenteditable plus the decorative
   // corner handles as SIBLINGS, not children of the editable node — putting the handles inside
   // the editable div would make them part of its content: `el.textContent` (what getValue()
@@ -56,7 +66,6 @@ export function createEditorReplica(sourceElement: Element, initialText: string)
   wrapper.style.left = `${rect.left}px`
   wrapper.style.top = `${rect.top}px`
   wrapper.style.width = `${rect.width}px`
-  wrapper.style.minHeight = `${rect.height}px`
   wrapper.style.zIndex = '2147483001'
   // Appended inside the overlay root, which is `pointer-events: none` so the full-viewport
   // layer never blocks clicks on the real page — every actual interactive element inside it,
@@ -66,8 +75,14 @@ export function createEditorReplica(sourceElement: Element, initialText: string)
   const el = document.createElement('div')
   el.contentEditable = 'true'
   el.spellcheck = true
-  el.style.position = 'absolute'
-  el.style.inset = '0'
+  // A normal in-flow child, not `position: absolute; inset: 0` — the wrapper has no height of
+  // its own, so it must be SIZED BY its content (this div growing as the user types past the
+  // original block's line count), not the other way around. Absolute-positioning el to fill a
+  // wrapper that never grows past its initial rect left the border/handles stuck at the
+  // original (often shorter) height while the actual editable text overflowed below them.
+  el.style.position = 'relative'
+  el.style.minHeight = `${rect.height}px`
+  el.style.width = '100%'
   el.style.pointerEvents = 'auto'
   el.style.boxSizing = 'border-box'
   // A Figma-style selection box: a solid 1px border (not an outline, so the corner handles can
@@ -151,7 +166,10 @@ export function createEditorReplica(sourceElement: Element, initialText: string)
       el.textContent = value
     },
     setCaret: (offset) => setCaretAt(el, offset),
-    destroy: () => wrapper.remove(),
+    destroy: () => {
+      wrapper.remove()
+      if (sourceEl) sourceEl.style.visibility = previousVisibility
+    },
     onInput: (handler) => inputHandlers.push(handler),
     onCommit: (handler) => commitHandlers.push(handler),
     onCancel: (handler) => cancelHandlers.push(handler),
