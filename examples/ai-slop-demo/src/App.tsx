@@ -31,7 +31,7 @@ export function App() {
           <span className="eyebrow">✨ Introducing Synthara 2.0</span>
           <h1>Bring out your team's full potential with next-level workflow intelligence</h1>
           <p className="hero-sub">
-            In today's fast-paced world, teams need more than just another dashboard — they need a
+            In today's fast-paced world, teams need more than just another dashboard , they need a
             partner. Synthara isn't just a productivity tool, it's a complete transformation of how
             your organization gets things done.
           </p>
@@ -101,7 +101,7 @@ export function App() {
             <ul className="checklist">
               <li>Unlock a truly holistic view of your workflow</li>
               <li>Onboard in minutes, not weeks</li>
-              <li>Not just a tool — a philosophy</li>
+              <li>Not just a tool , a philosophy</li>
             </ul>
           </div>
           <div className="split-visual" />
@@ -152,7 +152,7 @@ export function App() {
           <h2>Ready to get started?</h2>
           <p>
             Let's dive in and see what's possible when you truly unlock your organization's full
-            potential — with a little help from Synthara.
+            potential , with a little help from Synthara.
           </p>
           <div className="hero-actions">
             <button type="button" className="btn btn-primary">
