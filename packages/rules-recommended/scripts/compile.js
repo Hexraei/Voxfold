@@ -16,7 +16,7 @@ const rulesDir = join(here, '..', 'rules')
 const outDir = join(here, '..', 'src', 'generated')
 
 /** Rule set version. Bump the minor when a change moves scores; see README. */
-const VERSION = '1.0.0'
+const VERSION = '1.1.0'
 
 const KINDS = new Set(['mechanical', 'structural'])
 const SEVERITIES = new Set(['off', 'warn', 'error'])
@@ -42,6 +42,10 @@ const DETECTORS = new Set([
   'adverb-inanimate-subject',
   'emoji-heading',
   'bold-lead-in-list',
+  'scope-disclaimer',
+  'not-x-contrast',
+  'bold-overuse',
+  'dense-paragraph',
 ])
 
 const errors = []

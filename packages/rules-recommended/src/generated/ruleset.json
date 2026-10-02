@@ -1,6 +1,6 @@
 {
   "name": "recommended",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "rules": [
     {
       "id": "adverb-inanimate-subject",
@@ -153,10 +153,48 @@
       },
       "examples": {
         "flag": [
-          "Fast: ships in milliseconds"
+          "**Fast:** ships in milliseconds"
         ],
         "pass": [
-          "Run the CLI once to create a config file."
+          "Run the CLI once to create a config file.",
+          "WOOD1P: iteration limit"
+        ]
+      }
+    },
+    {
+      "id": "bold-overuse",
+      "lang": "en",
+      "kind": "structural",
+      "category": "markdown",
+      "weight": 2,
+      "severity": "warn",
+      "message": "Several bold spans in one block",
+      "docs": "Bold works when it is rare. Three or more in one paragraph or row leaves nothing standing out.",
+      "match": {
+        "type": "detector",
+        "detector": "bold-overuse",
+        "params": {
+          "minSpansPerBlock": 3
+        }
+      },
+      "skipIn": [
+        "heading"
+      ],
+      "formats": [
+        "markdown",
+        "mdx"
+      ],
+      "density": {
+        "per": "document",
+        "threshold": 6,
+        "below": 0.2
+      },
+      "examples": {
+        "flag": [
+          "**One** and **two** and **three**."
+        ],
+        "pass": [
+          "One **bold** word."
         ]
       }
     },
@@ -277,6 +315,36 @@
         ],
         "pass": [
           "Here are the details."
+        ]
+      }
+    },
+    {
+      "id": "dense-paragraph",
+      "lang": "en",
+      "kind": "structural",
+      "category": "construction",
+      "weight": 3,
+      "severity": "warn",
+      "message": "Paragraph too long to skim",
+      "docs": "Over about 110 words in one block. Split it, or turn the list inside it into a list.",
+      "match": {
+        "type": "detector",
+        "detector": "dense-paragraph",
+        "params": {
+          "maxWords": 110
+        }
+      },
+      "appliesTo": [
+        "paragraph",
+        "blockquote",
+        "listItem"
+      ],
+      "examples": {
+        "flag": [
+          "The solver reads the model and runs the method for each case. The solver reads the model and runs the method for each case. The solver reads the model and runs the method for each case. The solver reads the model and runs the method for each case. The solver reads the model and runs the method for each case. The solver reads the model and runs the method for each case. The solver reads the model and runs the method for each case. The solver reads the model and runs the method for each case. The solver reads the model and runs the method for each case. The solver reads the model and runs the method for each case. The solver reads the model and runs the method for each case. The solver reads the model and runs the method for each case."
+        ],
+        "pass": [
+          "Short."
         ]
       }
     },
@@ -1155,6 +1223,39 @@
       }
     },
     {
+      "id": "not-x-contrast",
+      "lang": "en",
+      "kind": "structural",
+      "category": "construction",
+      "weight": 3,
+      "severity": "warn",
+      "message": "\"X, not Y\" contrast",
+      "docs": "Defining a thing by what it is not, again and again, is a generated rhythm. State what it is.",
+      "match": {
+        "type": "detector",
+        "detector": "not-x-contrast"
+      },
+      "appliesTo": [
+        "paragraph",
+        "listItem",
+        "blockquote",
+        "tableCell"
+      ],
+      "density": {
+        "per": "document",
+        "threshold": 5,
+        "below": 0.3
+      },
+      "examples": {
+        "flag": [
+          "It is a smoke test, not a benchmark."
+        ],
+        "pass": [
+          "It is a smoke test."
+        ]
+      }
+    },
+    {
       "id": "parallel-pair",
       "lang": "en",
       "kind": "structural",
@@ -1349,6 +1450,39 @@
         ],
         "pass": [
           "Retries removed 90% of flaky failures."
+        ]
+      }
+    },
+    {
+      "id": "scope-disclaimer",
+      "lang": "en",
+      "kind": "structural",
+      "category": "construction",
+      "weight": 3,
+      "severity": "warn",
+      "message": "Scope disclaimer sentence",
+      "docs": "Sentences that say what the work does not claim read as boilerplate when they repeat. Keep one, put the limit next to the number it limits, and cut the rest.",
+      "match": {
+        "type": "detector",
+        "detector": "scope-disclaimer"
+      },
+      "appliesTo": [
+        "paragraph",
+        "listItem",
+        "blockquote",
+        "tableCell"
+      ],
+      "density": {
+        "per": "document",
+        "threshold": 4,
+        "below": 0.3
+      },
+      "examples": {
+        "flag": [
+          "No speed advantage over the reference solver is claimed."
+        ],
+        "pass": [
+          "The solver passed 90 of 93 cases."
         ]
       }
     },

@@ -46,6 +46,32 @@
     below: 0.2
   examples:
     flag:
-      - "Fast: ships in milliseconds"
+      - "**Fast:** ships in milliseconds"
     pass:
       - Run the CLI once to create a config file.
+      - "WOOD1P: iteration limit"
+
+- id: bold-overuse
+  lang: en
+  kind: structural
+  category: markdown
+  weight: 2
+  severity: warn
+  message: "Several bold spans in one block"
+  docs: "Bold works when it is rare. Three or more in one paragraph or row leaves nothing standing out."
+  match:
+    type: detector
+    detector: bold-overuse
+    params:
+      minSpansPerBlock: 3
+  skipIn: [heading]
+  formats: [markdown, mdx]
+  density:
+    per: document
+    threshold: 6
+    below: 0.2
+  examples:
+    flag:
+      - "**One** and **two** and **three**."
+    pass:
+      - "One **bold** word."

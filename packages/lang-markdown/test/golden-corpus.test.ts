@@ -35,9 +35,9 @@ describe('golden corpus scores', () => {
     const files = readdirSync(dir).filter((f) => f.endsWith('.md'))
     const scores = Object.fromEntries(files.sort().map((f) => [f, scoreFile(dir, f)]))
     expect(scores).toEqual({
-      'api-reference.md': { score: 99, grade: 'A' },
+      'api-reference.md': { score: 98, grade: 'A' },
       'changelog.md': { score: 100, grade: 'A' },
-      'cli-help.md': { score: 80, grade: 'B' },
+      'cli-help.md': { score: 96, grade: 'A' },
       'engineering-notes.md': { score: 97, grade: 'A' },
       'howto-guide.md': { score: 97, grade: 'A' },
       'project-readme.md': { score: 97, grade: 'A' },

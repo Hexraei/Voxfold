@@ -10,8 +10,28 @@ import { describe, expect, it } from 'vitest'
 import { recommended } from '../src/index'
 
 /** Build a single-block document from plain text, as if an adapter had extracted it. */
-function documentOf(text: string, kind: BlockKind, format: ProseDocument['format']): ProseDocument {
+function documentOf(
+  example: string,
+  kind: BlockKind,
+  format: ProseDocument['format'],
+): ProseDocument {
+  // `**bold**` in an example becomes real emphasis: the markers are removed from the text and
+  // their ranges reported the way the Markdown adapter reports them.
+  const emphasis: Array<[number, number]> = []
+  let text = ''
+  let open = -1
+  for (let i = 0; i < example.length; i++) {
+    if (example.startsWith('**', i)) {
+      if (open < 0) open = text.length
+      else {
+        emphasis.push([open, text.length])
+        open = -1
+      }
+      i++
+    } else text += example[i]
+  }
   const { block } = new BlockBuilder().addText(text, 0, text.length).build({ id: 'b1', kind })
+  block.emphasis = emphasis
   return {
     uri: `example.${format}`,
     format,
