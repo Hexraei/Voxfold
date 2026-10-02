@@ -119,6 +119,7 @@ function buildBlock(
   source: string,
 ): Block | undefined {
   const builder = new BlockBuilder()
+  const emphasis: Array<[number, number]> = []
 
   const walk = (parent: Parents, parentAncestors: readonly Parents[]): void => {
     for (const child of parent.children as PhrasingContent[]) {
@@ -161,7 +162,11 @@ function buildBlock(
 
       if (INLINE_CONTAINERS.has(child.type) && isParent(child as Nodes)) {
         // Link text is prose and is linted; the URL never is.
+        const flatStart = builder.length
         walk(child as Parents, [...parentAncestors, parent])
+        if (child.type === 'strong' && builder.length > flatStart) {
+          emphasis.push([flatStart, builder.length])
+        }
         continue
       }
 
@@ -181,6 +186,8 @@ function buildBlock(
       ...(ancestors.some((a) => a.type === 'list') ? { inList: true } : {}),
     },
   })
+  // Always set, even when empty: rules treat a missing array as "adapter doesn't know".
+  block.emphasis = emphasis
   return block.text.trim().length > 0 ? block : undefined
 }
 

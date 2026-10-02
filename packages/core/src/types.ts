@@ -87,6 +87,11 @@ export interface Block {
   text: string
   segments: Segment[]
   context: BlockContext
+  /**
+   * Flat-text ranges `[start, end)` the author emphasised (bold or strong). Optional: adapters
+   * that flatten emphasis away omit it, and rules that need it then find nothing.
+   */
+  emphasis?: Array<[number, number]>
 }
 
 export type DirectiveType = 'disable' | 'enable' | 'disable-next-line' | 'disable-line'

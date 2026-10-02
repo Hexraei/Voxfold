@@ -12,6 +12,7 @@
 import type { Sentence } from '../text/sentences.ts'
 import { isWordToken } from '../text/tokenize.ts'
 import type { Block } from '../types.ts'
+import { STRUCTURE_DETECTORS } from './detectors-structure.ts'
 import type { Match, MatchContext } from './match.ts'
 
 export interface DetectorContext extends MatchContext {
@@ -458,6 +459,16 @@ const boldLeadInList: Detector = (context, params) => {
 
   const start = match.index + match[0].indexOf(lead)
   const end = start + lead.length
+
+  // When the adapter reports emphasis (an array, even an empty one), the lead-in must really be
+  // bold: a bold span has to cover the lead. Plain "WOOD1P: iteration limit" is not this tell.
+  // Adapters that report nothing keep the old shape-only behaviour.
+  if (context.block.emphasis) {
+    const bold = context.block.emphasis.some(
+      ([from, to]) => from <= start + 0 && to >= end - 0 && to > from,
+    )
+    if (!bold) return []
+  }
   const startToken = context.tokens.findIndex((token) => token.start <= start && token.end > start)
   const endToken = context.tokens.findIndex((token) => token.start < end && token.end >= end)
   if (startToken === -1) return []
@@ -475,6 +486,7 @@ export const DETECTORS: Readonly<Record<string, Detector>> = Object.freeze({
   'adverb-inanimate-subject': adverbInanimateSubject,
   'emoji-heading': emojiHeading,
   'bold-lead-in-list': boldLeadInList,
+  ...STRUCTURE_DETECTORS,
 })
 
 export function getDetector(name: string): Detector | undefined {
