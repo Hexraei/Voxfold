@@ -35,8 +35,20 @@ export interface FixResult {
 }
 
 const SENTENCE_END = /[.!?]["')\]]?\s*$/
-const ARTICLE_BEFORE_VOWEL = /\ba\s+(?=[aeiou])/gi
-const ARTICLE_BEFORE_CONSONANT = /\ban\s+(?![aeiou])/gi
+const ARTICLE_BEFORE_VOWEL = /\ba\s+$/i
+const ARTICLE_BEFORE_CONSONANT = /\ban\s+$/i
+
+/** True when deleting `[start, end)` leaves "a"/"an" directly before a word it no longer fits. */
+function articleDisagrees(text: string, start: number, end: number): boolean {
+  const before = text.slice(0, start)
+  const next = text.slice(end).match(/^\s*(\p{L})/u)?.[1]
+  if (!next) return false
+  const vowel = /[aeiou]/i.test(next)
+  return (
+    (ARTICLE_BEFORE_VOWEL.test(before) && vowel) ||
+    (ARTICLE_BEFORE_CONSONANT.test(before) && !vowel)
+  )
+}
 
 /** Apply an edit list to text, for verification. Edits must not overlap. */
 export function applyEdits(text: string, edits: readonly FlatEdit[]): string {
@@ -100,15 +112,13 @@ function planDeletion(text: string, match: Match, cleanup: readonly CleanupOp[])
     }
   }
 
-  if (cleanup.includes('fix-article')) {
-    const repaired = result
-      .replace(ARTICLE_BEFORE_VOWEL, (article) => `${article.trimEnd().slice(0, -1)}an `)
-      .replace(ARTICLE_BEFORE_CONSONANT, (article) => `${article.trimEnd().slice(0, -2)}a `)
-    if (repaired !== result) {
-      // Article repair rewrites arbitrary spans; rather than compute more edits, refuse the
-      // automatic fix. The suggestion path still offers the deletion to a human.
-      return { suggestions: [{ label: 'delete', edits }], downgraded: true }
-    }
+  // Deleting an adjective can leave the article before it disagreeing with the next word
+  // ("a seamless experience" → "a experience"). Only the words touching the deletion are checked,
+  // so an unrelated "a apple" elsewhere in the block cannot demote this fix. Repairing the article
+  // would mean editing a second span, so the automatic fix is refused; the suggestion path still
+  // offers the deletion to a human.
+  if (articleDisagrees(text, start, end)) {
+    return { suggestions: [{ label: 'delete', edits }], downgraded: true }
   }
 
   if (!isWellFormed(result, text)) {
@@ -152,8 +162,17 @@ function planReplacement(text: string, match: Match, map: Record<string, string>
   ) {
     cased = replacement.toUpperCase()
   }
-  void text
-  return [{ start: match.start, end: match.end, text: cased }]
+  // A replacement that is itself punctuation ("—" → ", ") must not sit between the spaces that
+  // surrounded the original: "stack — quietly" would become "stack ,  quietly".
+  let { start, end } = match
+  if (/^[,;:.]/.test(cased)) {
+    while (start > 0 && /[ \t]/.test(text[start - 1]!)) start--
+    while (end < text.length && /[ \t]/.test(text[end]!)) end++
+    const space = end < text.length && !/[\r\n]/.test(text[end]!) ? ' ' : ''
+    // "quietly, — so" already has its comma; adding another would double it.
+    cased = start > 0 && /[,;:.!?]/.test(text[start - 1]!) ? space : cased.trimEnd() + space
+  }
+  return [{ start, end, text: cased }]
 }
 
 function planSuggestions(

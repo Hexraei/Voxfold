@@ -185,6 +185,64 @@ describe('engine: fixes and suggestions', () => {
     expect(flag.suggestions?.map((s) => s.label)).toEqual(['comma', 'full stop'])
   })
 
+  it('swallows the spaces around a punctuation replacement instead of doubling them', () => {
+    const emDash = rule({
+      id: 'em-dash',
+      kind: 'mechanical',
+      match: { type: 'chars', chars: ['—'] },
+      fix: { type: 'replace', map: { '*': ', ' } },
+    })
+    const text = 'It fits your stack — quietly. Or fits—it works.'
+    const result = lint(docOf(text), setOf(emDash))
+    expect(applyFixes(text, result.flags)).toBe('It fits your stack, quietly. Or fits, it works.')
+  })
+
+  it('refuses to delete a word when it would leave "a" before a vowel', () => {
+    const seamless = rule({
+      id: 'seamless',
+      kind: 'mechanical',
+      match: { type: 'words', words: ['seamless'] },
+      fix: { type: 'delete', cleanup: ['collapse-space'] },
+    })
+    const text = 'A seamless experience.'
+    const result = lint(docOf(text), setOf(seamless))
+    expect(result.flags[0]!.fix).toBeUndefined()
+    expect(applyFixes(text, result.flags)).toBe(text)
+  })
+
+  it('still deletes a word when the article agrees with what follows', () => {
+    const seamless = rule({
+      id: 'seamless',
+      kind: 'mechanical',
+      match: { type: 'words', words: ['seamless'] },
+      fix: { type: 'delete', cleanup: ['collapse-space'] },
+    })
+    const text = 'A seamless product, and an apple.'
+    const result = lint(docOf(text), setOf(seamless))
+    expect(applyFixes(text, result.flags)).toBe('A product, and an apple.')
+  })
+
+  it('does not combine fixes that sit right next to each other', () => {
+    const effortlessly = rule({
+      id: 'effortlessly',
+      kind: 'mechanical',
+      match: { type: 'words', words: ['effortlessly'] },
+      fix: { type: 'delete', cleanup: ['collapse-space'] },
+    })
+    const emDash = rule({
+      id: 'em-dash',
+      kind: 'mechanical',
+      match: { type: 'chars', chars: ['—'] },
+      fix: { type: 'replace', map: { '*': ', ' } },
+    })
+    const text = 'It works quietly, effortlessly — so use it.'
+    const result = lint(docOf(text), setOf(effortlessly, emDash))
+    const once = applyFixes(text, result.flags)
+    expect(once).not.toMatch(/,\s*,|\s,/)
+    const second = lint(docOf(once), setOf(effortlessly, emDash))
+    expect(applyFixes(once, second.flags)).not.toMatch(/,\s*,|\s,|—/)
+  })
+
   it('skips overlapping fixes rather than guessing which rule wins', () => {
     const a = rule({
       id: 'a',

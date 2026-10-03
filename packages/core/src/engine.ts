@@ -334,17 +334,28 @@ export function lint(
  * file's own flags (a flag belongs to exactly one document via `blockId`/`document.uri`).
  */
 export function applyFixes(text: string, flags: readonly Flag[]): string {
-  const edits = flags.flatMap((flag) => flag.fix ?? [])
+  const edits = flags.flatMap((flag, owner) => (flag.fix ?? []).map((edit) => ({ ...edit, owner })))
   // Longest match first at a given position: "in order to" should win over "order", since the
   // more specific rule is the one that understood the phrase.
   const sorted = [...edits].sort((a, b) => a.start - b.start || b.end - a.end)
 
   // Overlapping fixes are then dropped rather than merged: two rules rewriting the same span
   // cannot both be right, and guessing which wins is exactly the kind of silent damage to avoid.
-  const safe: SourceEdit[] = []
+  const safe: Array<SourceEdit & { owner: number }> = []
   for (const edit of sorted) {
     const previous = safe[safe.length - 1]
     if (previous && edit.start < previous.end) continue
+    // Two fixes from DIFFERENT flags separated by at most a space or comma ("quietly, effortlessly
+    // —") together tend to leave doubled punctuation that neither produces alone. Apply the first
+    // now; the second is still flagged and a second `--fix` run picks it up on the repaired text.
+    // One flag's own edits (a deletion plus its recapitalization) are always kept together.
+    if (
+      previous &&
+      previous.owner !== edit.owner &&
+      /^[\s,;:]{0,2}$/.test(text.slice(previous.end, edit.start))
+    ) {
+      continue
+    }
     safe.push(edit)
   }
   return applyEdits(text, safe)
