@@ -12,6 +12,9 @@ import { sha256 } from '../src/hash.ts'
 import { applyEditRequest } from '../src/protocol.ts'
 import { cleanup, extractSync, findSegment, makeTrackedRepo, resetTrackedFile } from './helpers.ts'
 
+// Keep all 2,000 real-write checks on Windows despite slower Git process startup.
+const fuzzTimeout = process.platform === 'win32' ? 600_000 : 60_000
+
 // Includes JSX's own special characters (`{`, `}`, `<`, `>`, `&`) alongside the general set, since
 // those are exactly what a careless encoder in this adapter could get wrong.
 const WORD_POOL = ['the', 'team', 'platform', 'utilize', 'robust', 'quickly', 'data', 'every']
@@ -86,7 +89,5 @@ describe('fuzz: random edits never corrupt a JSX file', () => {
       // hand at 10,000 iterations with zero failures before scaling back (see the M7 commit).
       { numRuns: 2000 },
     )
-    // 60s, not 30s: matches fuzz.test.ts's own budget — the same I/O-bound per-run cost applies
-    // here, and this is headroom against machine variance, not a change to the property itself.
-  }, 60_000)
+  }, fuzzTimeout)
 })

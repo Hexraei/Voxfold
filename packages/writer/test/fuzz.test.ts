@@ -14,6 +14,9 @@ import { sha256 } from '../src/hash.ts'
 import { applyEditRequest } from '../src/protocol.ts'
 import { cleanup, extractSync, findSegment, makeTrackedRepo, resetTrackedFile } from './helpers.ts'
 
+// Keep all 2,000 real-write checks on Windows despite slower Git process startup.
+const fuzzTimeout = process.platform === 'win32' ? 600_000 : 60_000
+
 // Plain words plus the characters the build plan specifically calls out as fuzz targets:
 // `{}<>&*_\`|#`, emoji, and a couple of astral/combining characters.
 const WORD_POOL = [
@@ -118,9 +121,5 @@ describe('fuzz: random edits never corrupt a file', () => {
       // adapter's writer hooks.
       { numRuns: 2000 },
     )
-    // 60s, not 30s: each of the 2000 runs does a real file write, git check, and re-parse, which
-    // is genuinely I/O-bound and has been observed to cross 30s on a loaded machine even with no
-    // change to the property itself — this is headroom against machine variance, not a signal
-    // that the iteration count needs to come down.
-  }, 60_000)
+  }, fuzzTimeout)
 })

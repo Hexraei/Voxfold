@@ -12,6 +12,9 @@ import { sha256 } from '../src/hash.ts'
 import { applyEditRequest } from '../src/protocol.ts'
 import { cleanup, extractSync, findSegment, makeTrackedRepo, resetTrackedFile } from './helpers.ts'
 
+// Keep all 2,000 real-write checks on Windows despite slower Git process startup.
+const fuzzTimeout = process.platform === 'win32' ? 600_000 : 60_000
+
 const WORD_POOL = ['the', 'team', 'platform', 'utilize', 'robust', 'quickly', 'data', 'every']
 const SPECIAL_CHARS = ['{', '}', '<', '>', '&', '*', '_', '`', '|', '#', '\\', '"', "'"]
 const wordArb = fc.constantFrom(...WORD_POOL)
@@ -79,5 +82,5 @@ describe('fuzz: random edits never corrupt an HTML file', () => {
       }),
       { numRuns: 2000 },
     )
-  }, 60_000)
+  }, fuzzTimeout)
 })
