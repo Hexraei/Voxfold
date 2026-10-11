@@ -72,6 +72,15 @@ describe('resolve', () => {
 })
 
 describe('plan', () => {
+  it('accepts a root with a trailing separator without weakening containment', async () => {
+    const { ctx, relativePath } = setup('export const x = <p>Hello</p>\n')
+    ctx.allowedRoot = `${ctx.allowedRoot}/`
+    await expect(lintFile(ctx, { relativePath })).resolves.toBeDefined()
+    await expect(lintFile(ctx, { relativePath: '../outside.tsx' })).rejects.toMatchObject({
+      code: 'PathNotAllowed',
+    })
+  })
+
   it('returns the diff for a valid edit without writing anything', async () => {
     const content = 'export const x = <p>We utilize a robust plan for everyone here.</p>\n'
     const { ctx, relativePath, stampId, file } = setup(content)

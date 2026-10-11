@@ -44,7 +44,7 @@ describe('virtual client module', () => {
       const resolved = callHook(plugin.resolveId, specifier, undefined, {
         isEntry: false,
       } as never)
-      expect(resolved).toMatch(/^\/.*preact/)
+      expect(resolved).toMatch(/^(?:\/|[A-Za-z]:\/).*preact/)
       expect(resolved).not.toMatch(/^file:\/\//)
     }
   })
@@ -56,9 +56,10 @@ describe('virtual client module', () => {
 
     // Same file, modulo the bare specifiers this module doc says get rewritten.
     expect(loaded).not.toBe(realSource)
-    expect(loaded).toMatch(/from '\//)
+    expect(loaded).toMatch(/from '(?:\/|[A-Za-z]:\/)/)
     expect(loaded).not.toContain("from 'file://")
     expect(loaded).not.toContain("from '@voxfold/overlay'")
+    expect(loaded).not.toMatch(/from '[^']*\\/)
   })
 
   it('load() returns null for anything else', () => {

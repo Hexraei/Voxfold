@@ -76,6 +76,7 @@ import type { AstroIntegration } from 'astro'
 import type { Root as HastRoot } from 'hast'
 import type { VFile } from 'vfile'
 import type { Connect, Plugin, ViteDevServer } from 'vite'
+import { normalizePath } from 'vite'
 
 export interface VoxfoldAstroOptions {
   /** Mount path for the edit server. Default '/__voxfold'. */
@@ -115,7 +116,7 @@ const CLIENT_BARE_SPECIFIERS = [
 function resolveClientImports(source: string): string {
   let rewritten = source
   for (const specifier of CLIENT_BARE_SPECIFIERS) {
-    const resolved = fileURLToPath(import.meta.resolve(specifier))
+    const resolved = normalizePath(fileURLToPath(import.meta.resolve(specifier)))
     rewritten = rewritten.split(`'${specifier}`).join(`'${resolved}`)
   }
   return rewritten
@@ -197,7 +198,8 @@ export function voxfoldAstro(options: VoxfoldAstroOptions = {}): AstroIntegratio
           name: 'voxfold:astro-client',
           resolveId(id) {
             if (id === VIRTUAL_CLIENT_ID) return RESOLVED_VIRTUAL_CLIENT_ID
-            if (PREACT_SPECIFIERS.has(id)) return fileURLToPath(import.meta.resolve(id))
+            if (PREACT_SPECIFIERS.has(id))
+              return normalizePath(fileURLToPath(import.meta.resolve(id)))
             return null
           },
           load(id) {

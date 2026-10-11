@@ -35,6 +35,7 @@ import {
 import { jsxAdapter } from '@voxfold/lang-jsx'
 import { recommended } from '@voxfold/rules-recommended'
 import type { Connect, Plugin, ViteDevServer } from 'vite'
+import { normalizePath } from 'vite'
 
 export interface VoxfoldPluginOptions {
   /** Mount path for the edit server. Default '/__voxfold'. */
@@ -110,7 +111,7 @@ function resolveClientImports(source: string): string {
     // own convention for a real filesystem path is a plain absolute path, which it then serves
     // itself through `/@fs/...` URL rewriting. `import.meta.resolve` returns a `file://` URL, so
     // convert it before splicing it into source Vite will hand straight to the browser.
-    const resolved = fileURLToPath(import.meta.resolve(specifier))
+    const resolved = normalizePath(fileURLToPath(import.meta.resolve(specifier)))
     // Longest-specifier-first order (see CLIENT_BARE_SPECIFIERS) so '@voxfold/overlay/worker'
     // is replaced before the bare '@voxfold/overlay' pattern could match a prefix of it.
     rewritten = rewritten.split(`'${specifier}`).join(`'${resolved}`)
@@ -179,7 +180,7 @@ export function voxfold(options: VoxfoldPluginOptions = {}): Plugin {
       // bare specifiers too, and under pnpm's strict linking the consuming app has no `preact` of
       // its own for Vite to (mis)resolve them against, which without this would otherwise let two
       // DIFFERENT copies of Preact end up loaded into the same page.
-      if (PREACT_SPECIFIERS.has(id)) return fileURLToPath(import.meta.resolve(id))
+      if (PREACT_SPECIFIERS.has(id)) return normalizePath(fileURLToPath(import.meta.resolve(id)))
       return null
     },
 

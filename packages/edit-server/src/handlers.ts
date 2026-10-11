@@ -6,7 +6,7 @@
 
 import { createHash } from 'node:crypto'
 import { readFile } from 'node:fs/promises'
-import { join, resolve as resolvePath } from 'node:path'
+import { isAbsolute, join, relative, resolve as resolvePath, sep } from 'node:path'
 import type { Flag, LintOptions, NodeRef, RuleSet } from '@voxfold/core'
 import { lint } from '@voxfold/core'
 import { applyEditRequest, isWriteError, undoLast, type WriteError } from '@voxfold/writer'
@@ -40,7 +40,10 @@ export interface EditServerContext {
 
 function assertKnownPath(ctx: EditServerContext, relativePath: string): string {
   const absolute = resolvePath(ctx.projectRoot, relativePath)
-  const withinRoot = absolute === ctx.allowedRoot || absolute.startsWith(`${ctx.allowedRoot}/`)
+  const fromRoot = relative(resolvePath(ctx.allowedRoot), absolute)
+  const withinRoot =
+    fromRoot === '' ||
+    (fromRoot !== '..' && !fromRoot.startsWith(`..${sep}`) && !isAbsolute(fromRoot))
   if (!withinRoot) {
     throw new EditServerError('PathNotAllowed', `${relativePath}: outside the project root`, 403)
   }

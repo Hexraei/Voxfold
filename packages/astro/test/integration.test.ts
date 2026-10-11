@@ -180,14 +180,15 @@ describe('voxfoldAstro(): client virtual module', () => {
     const loaded = callHook(plugin.load, '\0virtual:voxfold/client.ts') as string
     const realSource = readFileSync(join(import.meta.dirname, '..', 'src', 'client.ts'), 'utf8')
     expect(loaded).not.toBe(realSource)
-    expect(loaded).toMatch(/from '\//)
+    expect(loaded).toMatch(/from '(?:\/|[A-Za-z]:\/)/)
     expect(loaded).not.toContain("from '@voxfold/overlay'")
+    expect(loaded).not.toMatch(/from '[^']*\\/)
   })
 
   it('resolves preact to an absolute path for any importer', () => {
     const plugin = getClientPlugin()
     const resolved = callHook(plugin.resolveId, 'preact', undefined, { isEntry: false } as never)
-    expect(resolved).toMatch(/^\/.*preact/)
+    expect(resolved).toMatch(/^(?:\/|[A-Za-z]:\/).*preact/)
   })
 })
 
