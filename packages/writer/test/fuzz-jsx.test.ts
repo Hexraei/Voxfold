@@ -45,49 +45,53 @@ describe('fuzz: random edits never corrupt a JSX file', () => {
   const { dir, file } = makeTrackedRepo('Component.tsx', content)
   afterAll(() => cleanup(dir))
 
-  it('every write either succeeds and reads back exactly, or is cleanly refused', () => {
-    fc.assert(
-      fc.property(replacementArb, (replacement) => {
-        resetTrackedFile(file, content)
+  it(
+    'every write either succeeds and reads back exactly, or is cleanly refused',
+    () => {
+      fc.assert(
+        fc.property(replacementArb, (replacement) => {
+          resetTrackedFile(file, content)
 
-        const targetBlockIndex = 1
-        const document = extractSync(jsxAdapter, content, { uri: file })
-        const block = document.blocks[targetBlockIndex]!
-        const { ref, oldText } = findSegment(document, 'utilize')
-        expect(block.text).toContain(oldText)
-        const newText = oldText.replace('utilize', replacement)
-        const expectedNewBlockText = block.text.replace(oldText, newText)
+          const targetBlockIndex = 1
+          const document = extractSync(jsxAdapter, content, { uri: file })
+          const block = document.blocks[targetBlockIndex]!
+          const { ref, oldText } = findSegment(document, 'utilize')
+          expect(block.text).toContain(oldText)
+          const newText = oldText.replace('utilize', replacement)
+          const expectedNewBlockText = block.text.replace(oldText, newText)
 
-        let outcome: 'wrote' | 'refused'
-        try {
-          const result = applyEditRequest(
-            {
-              file,
-              adapter: jsxAdapter,
-              expectedFileHash: sha256(content),
-              targets: [{ ref, expectedOldText: oldText, newText }],
-            },
-            { projectRoot: dir },
-          )
-          outcome = 'wrote'
-          expect(readFileSync(file, 'utf8')).toBe(result.newText)
-        } catch (error) {
-          if (!isWriteError(error)) throw error
-          outcome = 'refused'
-        }
+          let outcome: 'wrote' | 'refused'
+          try {
+            const result = applyEditRequest(
+              {
+                file,
+                adapter: jsxAdapter,
+                expectedFileHash: sha256(content),
+                targets: [{ ref, expectedOldText: oldText, newText }],
+              },
+              { projectRoot: dir },
+            )
+            outcome = 'wrote'
+            expect(readFileSync(file, 'utf8')).toBe(result.newText)
+          } catch (error) {
+            if (!isWriteError(error)) throw error
+            outcome = 'refused'
+          }
 
-        if (outcome === 'refused') {
-          expect(readFileSync(file, 'utf8')).toBe(content)
-          return
-        }
+          if (outcome === 'refused') {
+            expect(readFileSync(file, 'utf8')).toBe(content)
+            return
+          }
 
-        const writtenOnDisk = readFileSync(file, 'utf8')
-        const reExtracted = extractSync(jsxAdapter, writtenOnDisk, { uri: file })
-        expect(reExtracted.blocks[targetBlockIndex]!.text).toBe(expectedNewBlockText)
-      }),
-      // 2000 to match this monorepo's other fast-check suites and keep CI fast. Run once by
-      // hand at 10,000 iterations with zero failures before scaling back (see the M7 commit).
-      { numRuns: 2000 },
-    )
-  }, fuzzTimeout)
+          const writtenOnDisk = readFileSync(file, 'utf8')
+          const reExtracted = extractSync(jsxAdapter, writtenOnDisk, { uri: file })
+          expect(reExtracted.blocks[targetBlockIndex]!.text).toBe(expectedNewBlockText)
+        }),
+        // 2000 to match this monorepo's other fast-check suites and keep CI fast. Run once by
+        // hand at 10,000 iterations with zero failures before scaling back (see the M7 commit).
+        { numRuns: 2000 },
+      )
+    },
+    fuzzTimeout,
+  )
 })
