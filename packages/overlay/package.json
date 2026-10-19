@@ -35,5 +35,19 @@
   "devDependencies": {
     "@voxfold/lang-html": "workspace:*",
     "happy-dom": "20.14.5"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Hexraei/Voxfold.git",
+    "directory": "packages/overlay"
+  },
+  "bugs": "https://github.com/Hexraei/Voxfold/issues",
+  "homepage": "https://github.com/Hexraei/Voxfold/tree/main/packages/overlay",
+  "keywords": [
+    "voxfold",
+    "style-linter",
+    "overlay",
+    "devtools",
+    "copywriting"
+  ]
 }

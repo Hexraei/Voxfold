@@ -30,5 +30,19 @@
   },
   "devDependencies": {
     "@voxfold/rules-recommended": "workspace:*"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Hexraei/Voxfold.git",
+    "directory": "packages/lang-vue"
+  },
+  "bugs": "https://github.com/Hexraei/Voxfold/issues",
+  "homepage": "https://github.com/Hexraei/Voxfold/tree/main/packages/lang-vue",
+  "keywords": [
+    "voxfold",
+    "style-linter",
+    "vue",
+    "adapter",
+    "copywriting"
+  ]
 }

@@ -54,5 +54,20 @@
     "next": "16.3.5",
     "react": "19.3.0",
     "react-dom": "19.3.0"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Hexraei/Voxfold.git",
+    "directory": "packages/next"
+  },
+  "bugs": "https://github.com/Hexraei/Voxfold/issues",
+  "homepage": "https://github.com/Hexraei/Voxfold/tree/main/packages/next",
+  "keywords": [
+    "voxfold",
+    "style-linter",
+    "nextjs",
+    "react",
+    "copywriting",
+    "ai-copy"
+  ]
 }

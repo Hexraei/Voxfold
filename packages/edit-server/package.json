@@ -30,5 +30,18 @@
   "devDependencies": {
     "@voxfold/lang-jsx": "workspace:*",
     "@voxfold/rules-recommended": "workspace:*"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Hexraei/Voxfold.git",
+    "directory": "packages/edit-server"
+  },
+  "bugs": "https://github.com/Hexraei/Voxfold/issues",
+  "homepage": "https://github.com/Hexraei/Voxfold/tree/main/packages/edit-server",
+  "keywords": [
+    "voxfold",
+    "style-linter",
+    "dev-server",
+    "copywriting"
+  ]
 }

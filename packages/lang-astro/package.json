@@ -29,5 +29,19 @@
   },
   "devDependencies": {
     "@voxfold/rules-recommended": "workspace:*"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Hexraei/Voxfold.git",
+    "directory": "packages/lang-astro"
+  },
+  "bugs": "https://github.com/Hexraei/Voxfold/issues",
+  "homepage": "https://github.com/Hexraei/Voxfold/tree/main/packages/lang-astro",
+  "keywords": [
+    "voxfold",
+    "style-linter",
+    "astro",
+    "adapter",
+    "copywriting"
+  ]
 }

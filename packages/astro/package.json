@@ -40,5 +40,20 @@
     "@types/hast": "3.0.5",
     "astro": "7.3.2",
     "vite": "8.3.0"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Hexraei/Voxfold.git",
+    "directory": "packages/astro"
+  },
+  "bugs": "https://github.com/Hexraei/Voxfold/issues",
+  "homepage": "https://github.com/Hexraei/Voxfold/tree/main/packages/astro",
+  "keywords": [
+    "voxfold",
+    "style-linter",
+    "astro",
+    "astro-integration",
+    "copywriting",
+    "ai-copy"
+  ]
 }

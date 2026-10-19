@@ -61,5 +61,20 @@
     "markdown-it": {
       "optional": true
     }
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Hexraei/Voxfold.git",
+    "directory": "packages/lang-markdown"
+  },
+  "bugs": "https://github.com/Hexraei/Voxfold/issues",
+  "homepage": "https://github.com/Hexraei/Voxfold/tree/main/packages/lang-markdown",
+  "keywords": [
+    "voxfold",
+    "style-linter",
+    "markdown",
+    "mdx",
+    "adapter",
+    "copywriting"
+  ]
 }

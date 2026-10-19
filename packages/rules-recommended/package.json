@@ -29,5 +29,20 @@
   },
   "devDependencies": {
     "yaml": "2.9.1"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Hexraei/Voxfold.git",
+    "directory": "packages/rules-recommended"
+  },
+  "bugs": "https://github.com/Hexraei/Voxfold/issues",
+  "homepage": "https://github.com/Hexraei/Voxfold/tree/main/packages/rules-recommended",
+  "keywords": [
+    "voxfold",
+    "style-linter",
+    "rules",
+    "ruleset",
+    "copywriting",
+    "ai-copy"
+  ]
 }

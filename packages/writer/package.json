@@ -33,5 +33,19 @@
     "@voxfold/lang-svelte": "workspace:*",
     "@voxfold/lang-vue": "workspace:*",
     "fast-check": "4.10.0"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Hexraei/Voxfold.git",
+    "directory": "packages/writer"
+  },
+  "bugs": "https://github.com/Hexraei/Voxfold/issues",
+  "homepage": "https://github.com/Hexraei/Voxfold/tree/main/packages/writer",
+  "keywords": [
+    "voxfold",
+    "style-linter",
+    "editing",
+    "writer",
+    "copywriting"
+  ]
 }

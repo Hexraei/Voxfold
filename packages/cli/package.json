@@ -45,5 +45,21 @@
   },
   "devDependencies": {
     "@types/micromatch": "4.0.10"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Hexraei/Voxfold.git",
+    "directory": "packages/cli"
+  },
+  "bugs": "https://github.com/Hexraei/Voxfold/issues",
+  "homepage": "https://github.com/Hexraei/Voxfold/tree/main/packages/cli",
+  "keywords": [
+    "voxfold",
+    "style-linter",
+    "linter",
+    "cli",
+    "copywriting",
+    "ai-copy",
+    "markdown"
+  ]
 }
