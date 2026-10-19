@@ -200,7 +200,7 @@ async function lintUrls(
   resolvedConfig: Awaited<ReturnType<typeof resolveConfig>>,
   formatterName: Parameters<typeof format>[0],
 ): Promise<number> {
-  const userAgent = flags.userAgent ?? `voxfold/${VERSION} (+https://github.com/voxfold/voxfold)`
+  const userAgent = flags.userAgent ?? `voxfold/${VERSION} (+https://github.com/Hexraei/Voxfold)`
 
   if (flags.crawl) {
     process.stderr.write('--crawl is not implemented yet; fetching the given URL(s) only.\n')

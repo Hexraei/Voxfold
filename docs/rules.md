@@ -1,6 +1,6 @@
 # Rules
 
-Generated from `packages/rules-recommended/rules/*.yaml`. Rule set `recommended@1.0.0`, 56 rules.
+Generated from `packages/rules-recommended/rules/*.yaml`. Rule set `recommended@1.1.0`, 60 rules.
 
 Weight is the score cost per occurrence. Every occurrence is flagged; where a density
 threshold is set, occurrences below it cost a fraction of the weight instead of the whole.
@@ -41,7 +41,10 @@ you write the replacement — that is the whole point of the linter.
 | `parallel-pair` | 4 | — | flag only | Built for speed. Designed for teams. |
 | `rhetorical-question` | 4 | — | flag only | The best part? There isn't one. |
 | `x-meets-y` | 4 | — | flag only | Where design meets engineering. |
+| `dense-paragraph` | 3 | — | flag only | The solver reads the model and runs the method for each case. The solver reads the model and runs the method for each case. The solver reads the model and runs the method for each case. The solver reads the model and runs the method for each case. The solver reads the model and runs the method for each case. The solver reads the model and runs the method for each case. The solver reads the model and runs the method for each case. The solver reads the model and runs the method for each case. The solver reads the model and runs the method for each case. The solver reads the model and runs the method for each case. The solver reads the model and runs the method for each case. The solver reads the model and runs the method for each case. |
 | `from-x-to-y` | 3 | — | flag only | From startups to enterprises, teams rely on it. |
+| `not-x-contrast` | 3 | 5+ per document | flag only | It is a smoke test, not a benchmark. |
+| `scope-disclaimer` | 3 | 4+ per document | flag only | No speed advantage over the reference solver is claimed. |
 
 ## Adverbs on things
 
@@ -66,7 +69,8 @@ you write the replacement — that is the whole point of the linter.
 | Rule | Weight | Density | Fix | Flags |
 |---|---|---|---|---|
 | `emoji-heading` | 3 | 3+ per document | flag only | 🚀 Features |
-| `bold-lead-in-list` | 2 | 4+ per document | flag only | Fast: ships in milliseconds |
+| `bold-lead-in-list` | 2 | 4+ per document | flag only | **Fast:** ships in milliseconds |
+| `bold-overuse` | 2 | 6+ per document | flag only | **One** and **two** and **three**. |
 
 ## Openers and closers
 
@@ -167,10 +171,25 @@ Bold lead-in on a list item — A page of "**Fast:** …" bullets reads as gener
 - only on: listItem
 
 Flags:
-- Fast: ships in milliseconds
+- **Fast:** ships in milliseconds
 
 Passes:
 - Run the CLI once to create a config file.
+- WOOD1P: iteration limit
+
+### `bold-overuse`
+
+Several bold spans in one block — Bold works when it is rare. Three or more in one paragraph or row leaves nothing standing out.
+
+- kind: structural, weight: 2, fix: flag only
+- only in: markdown, mdx
+- skipped in: heading
+
+Flags:
+- **One** and **two** and **three**.
+
+Passes:
+- One **bold** word.
 
 ### `colon-reveal`
 
@@ -219,6 +238,19 @@ Flags:
 
 Passes:
 - Here are the details.
+
+### `dense-paragraph`
+
+Paragraph too long to skim — Over about 110 words in one block. Split it, or turn the list inside it into a list.
+
+- kind: structural, weight: 3, fix: flag only
+- only on: paragraph, blockquote, listItem
+
+Flags:
+- The solver reads the model and runs the method for each case. The solver reads the model and runs the method for each case. The solver reads the model and runs the method for each case. The solver reads the model and runs the method for each case. The solver reads the model and runs the method for each case. The solver reads the model and runs the method for each case. The solver reads the model and runs the method for each case. The solver reads the model and runs the method for each case. The solver reads the model and runs the method for each case. The solver reads the model and runs the method for each case. The solver reads the model and runs the method for each case. The solver reads the model and runs the method for each case.
+
+Passes:
+- Short.
 
 ### `dive-in`
 
@@ -564,6 +596,19 @@ Passes:
 - It is more than we expected.
 - It doesn't just work on Linux; we test on Windows as well.
 
+### `not-x-contrast`
+
+"X, not Y" contrast — Defining a thing by what it is not, again and again, is a generated rhythm. State what it is.
+
+- kind: structural, weight: 3, fix: flag only
+- only on: paragraph, listItem, blockquote, tableCell
+
+Flags:
+- It is a smoke test, not a benchmark.
+
+Passes:
+- It is a smoke test.
+
 ### `parallel-pair`
 
 Parallel participle pair ("Built for X. Designed for Y.") — Matched sentence openings are a rhythm device. One plain sentence usually carries more.
@@ -649,6 +694,19 @@ Flags:
 
 Passes:
 - Retries removed 90% of flaky failures.
+
+### `scope-disclaimer`
+
+Scope disclaimer sentence — Sentences that say what the work does not claim read as boilerplate when they repeat. Keep one, put the limit next to the number it limits, and cut the rest.
+
+- kind: structural, weight: 3, fix: flag only
+- only on: paragraph, listItem, blockquote, tableCell
+
+Flags:
+- No speed advantage over the reference solver is claimed.
+
+Passes:
+- The solver passed 90 of 93 cases.
 
 ### `seamlessly`
 

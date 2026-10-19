@@ -47,7 +47,7 @@ No web app, no browser extension, no hosted scanner — CLI + local dev only.
   a false score).
 - Also lints Markdown (READMEs/docs) — see "Markdown adapter" below.
 - Prints flags with line numbers + the score.
-- `--max-score N` exits 1 if score exceeds threshold — this is what lets it
+- `--min-score N` exits 1 if the score is below the threshold — this is what lets it
   live in CI.
 - `--fix` applies only the mechanical/auto-fixable rules.
 - `--format json` for scripting.

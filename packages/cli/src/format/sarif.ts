@@ -66,7 +66,7 @@ export function formatSarif(summary: ProjectSummary, cwd: string): string {
         tool: {
           driver: {
             name: 'voxfold',
-            informationUri: 'https://github.com/voxfold/voxfold',
+            informationUri: 'https://github.com/Hexraei/Voxfold',
             rules,
           },
         },

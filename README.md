@@ -27,15 +27,17 @@ npx voxfold https://example.com
 ```
 
 ```
-README.md
-  3:17   not-just-x-its-y   "not just X, it's Y" construction
-  4:3    robust             "robust"
-  4:11   seamlessly         "seamlessly" [fixable]
-  6:1    utilize            "utilize" instead of "use" [fixable]
 
-  Style score: 42 / 100  (F)   recommended@1.0.0+compromise@14.17.0
-  4 fixable with --fix
-  1 file, 4 flags, 112 words
+README.md
+  4:4      not-x-contrast           "X, not Y" contrast
+  4:7      not-just-x-its-y         "not just X, it's Y" construction
+  5:3      robust                   "robust"
+  5:20     seamlessly               "seamlessly" [fixable]
+  7:4      utilize                  "utilize" instead of "use" [fixable]
+
+  Style score: 25 / 100  (F)   recommended@1.1.0+compromise@14.17.0
+  2 fixable with --fix
+  1 file, 5 flags, 115 words
 ```
 
 `--fix` applies the mechanical fixes only — anything without one obvious correction is
@@ -48,7 +50,7 @@ gate (exit 1 on failure). `voxfold init` detects your framework and writes a sta
 |---|---|
 | `voxfold` | CLI: lint files, globs and URLs; `--fix`; CI score gates; `init` |
 | `@voxfold/core` | Pure rule engine: text + offset map in, flags + score out |
-| `@voxfold/rules-recommended` | ~56 starter rules, YAML-authored, compiled to JSON |
+| `@voxfold/rules-recommended` | 60 starter rules, YAML-authored, compiled to JSON |
 | `@voxfold/lang-markdown`, `-html`, `-jsx`, `-vue`, `-svelte`, `-astro` | One adapter per format: extract prose, and (where write-back applies) a verify-then-write patcher |
 | `@voxfold/writer` | The safe-write protocol every write-capable adapter goes through: parse, patch, re-parse, byte-compare, only then write |
 | `@voxfold/edit-server` | Transport-agnostic handlers (resolve/plan/apply/undo/suppress) shared by every dev integration |
