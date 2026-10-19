@@ -1,6 +1,6 @@
 {
   "name": "@voxfold/edit-server",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Transport-agnostic dev-server handlers for Voxfold's overlay: stamp registry, resolve, plan, apply, undo, suppress.",
   "license": "MIT",
   "type": "module",

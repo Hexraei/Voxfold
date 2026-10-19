@@ -1,5 +1,11 @@
 # @voxfold/core
 
+## 0.1.1
+
+### Patch Changes
+
+- 412027f: Add per-package READMEs and npm metadata (repository, bugs, homepage, keywords). No functional changes.
+
 ## 0.1.0
 
 ### Minor Changes

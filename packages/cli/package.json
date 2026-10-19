@@ -1,6 +1,6 @@
 {
   "name": "voxfold",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Style linter for AI-copy tells: em dashes, \"not just X, it's Y\", tricolons, seamlessly/robust. No AI, no network, deterministic.",
   "license": "MIT",
   "type": "module",

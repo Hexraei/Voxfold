@@ -1,6 +1,6 @@
 {
   "name": "@voxfold/lang-vue",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Vue SFC adapter for Voxfold: walks @vue/compiler-sfc's template AST and flattens prose.",
   "license": "MIT",
   "type": "module",
