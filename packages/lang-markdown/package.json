@@ -1,6 +1,6 @@
 {
   "name": "@voxfold/lang-markdown",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "Markdown and MDX adapter for Voxfold: walks mdast, flattens prose, keeps offsets honest.",
   "license": "MIT",
   "type": "module",

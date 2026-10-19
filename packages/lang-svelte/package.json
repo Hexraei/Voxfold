@@ -1,6 +1,6 @@
 {
   "name": "@voxfold/lang-svelte",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "Svelte adapter for Voxfold: walks svelte/compiler's template AST and flattens prose.",
   "license": "MIT",
   "type": "module",

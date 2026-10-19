@@ -1,6 +1,6 @@
 {
   "name": "@voxfold/rules-recommended",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "The recommended Voxfold rule set: the AI-copy tells, as data.",
   "license": "MIT",
   "type": "module",
