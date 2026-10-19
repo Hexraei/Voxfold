@@ -31,7 +31,7 @@ export function App() {
           <span className="eyebrow">✨ Introducing Synthara 2.0</span>
           <h1>Bring out your team's full potential with upscaled workflow intelligence</h1>
           <p className="hero-sub">
-            In today's world, teams need more than just another dashboard , they need a partner.
+            In today's world, teams need more than just another dashboard — they need a partner.
             Synthara isn't just a productivity tool, it's a complete transformation of how your
             organization gets things done.
           </p>
@@ -73,12 +73,17 @@ export function App() {
             <div className="card">
               <div className="card-icon">⚡</div>
               <h3>Real-time collaboration</h3>
-              <p>Insights that elevate every conversation, streamlined across your whole team.</p>
+              <p>
+                Insights that improve every conversation, easy-to-access across your whole team.
+              </p>
             </div>
             <div className="card">
               <div className="card-icon">🧠</div>
               <h3>AI-powered insights</h3>
-              <p>A robust engine that quietly syncs your data across every device you own.</p>
+              <p>
+                A meticulously built engine that quietly syncs your data across every device you
+                own.
+              </p>
             </div>
             <div className="card">
               <div className="card-icon">🎨</div>
@@ -101,7 +106,7 @@ export function App() {
             <ul className="checklist">
               <li>Unlock a truly holistic view of your workflow</li>
               <li>Onboard in minutes, not weeks</li>
-              <li>Not just a tool , a philosophy</li>
+              <li>Not just a tool — a philosophy</li>
             </ul>
           </div>
           <div className="split-visual" />
@@ -152,7 +157,7 @@ export function App() {
           <h2>Ready to get started?</h2>
           <p>
             Let's dive in and see what's possible when you truly unlock your organization's full
-            potential , with a little help from Synthara.
+            potential — with a little help from Synthara.
           </p>
           <div className="hero-actions">
             <button type="button" className="btn btn-primary">
