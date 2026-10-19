@@ -49,7 +49,7 @@ export function Badge(props: BadgeProps) {
           {score ? score.grade : '—'}
         </span>
         <span class="vf-badge-score">{score ? score.value : 'N/A'}</span>
-        <span class="vf-badge-count">{flagCount} flags</span>
+        <span class="vf-badge-count">{flagCount === 1 ? '1 flag' : `${flagCount} flags`}</span>
       </button>
       <button
         type="button"

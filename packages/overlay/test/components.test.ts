@@ -59,6 +59,24 @@ describe('Badge', () => {
     expect(container.textContent).toContain('5 flags')
   })
 
+  it('pluralizes the flag count', () => {
+    const countText = (flagCount: number) =>
+      mountFor(
+        Badge({
+          score,
+          flagCount,
+          highlightsOn: false,
+          onToggleHighlights: () => {},
+          onTogglePanel: () => {},
+          panelOpen: false,
+        }),
+      ).textContent
+    expect(countText(0)).toContain('0 flags')
+    expect(countText(1)).toContain('1 flag')
+    expect(countText(1)).not.toContain('1 flags')
+    expect(countText(2)).toContain('2 flags')
+  })
+
   it('shows a dash and N/A when there is no score yet', () => {
     const container = mountFor(
       Badge({
