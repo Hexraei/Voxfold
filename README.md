@@ -13,7 +13,7 @@ It runs offline and never calls an AI model. It is a pattern linter, not an AI d
 does not claim to know whether text was AI-written, only that it contains specific, named
 tells worth a second look.
 
-> **Status:** feature-complete for a first release; not yet published to npm.
+> **Status:** v0.1, [published to npm](https://www.npmjs.com/package/voxfold).
 
 ## What it lints
 
