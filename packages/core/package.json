@@ -1,6 +1,6 @@
 {
   "name": "@voxfold/core",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "Deterministic style-tell engine for Voxfold: text + offset map in, flags + style score out.",
   "license": "MIT",
   "type": "module",

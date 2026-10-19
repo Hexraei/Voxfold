@@ -1,6 +1,6 @@
 {
   "name": "@voxfold/vite",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "Vite plugin: stamps JSX/TSX in dev, serves the edit-server over /__voxfold/*, and injects the browser overlay.",
   "license": "MIT",
   "type": "module",

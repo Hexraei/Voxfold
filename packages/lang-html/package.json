@@ -1,6 +1,6 @@
 {
   "name": "@voxfold/lang-html",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "HTML adapter for Voxfold: walks parse5 with location info, flattens visible prose.",
   "license": "MIT",
   "type": "module",

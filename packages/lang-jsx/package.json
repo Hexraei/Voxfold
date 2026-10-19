@@ -1,6 +1,6 @@
 {
   "name": "@voxfold/lang-jsx",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "JSX/TSX adapter for Voxfold: walks @babel/parser, replicates React's own whitespace algorithm, flattens prose.",
   "license": "MIT",
   "type": "module",
